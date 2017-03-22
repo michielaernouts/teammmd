@@ -1,5 +1,5 @@
 "C:\STM32Toolchain\teammmd\I2Cproject\Src\main.c"
--std=c99
+-std=c11
 -ferror-limit=100
 -I
 C:\STM32Toolchain\teammmd\I2Cproject\EWARM/../Inc
@@ -12,11 +12,11 @@ C:\STM32Toolchain\teammmd\I2Cproject\EWARM/../Drivers/CMSIS/Device/ST/STM32L1xx/
 -I
 C:\STM32Toolchain\teammmd\I2Cproject\EWARM/../Drivers/CMSIS/Include
 -I
-C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\CMSIS\Include
+C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\CMSIS\Include
 -I
-C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\inc
+C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\inc
 -I
-C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\inc\c
+C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\inc\c
 -I
 C:\STM32Toolchain\teammmd\I2Cproject\Inc
 -I
@@ -28,9 +28,7 @@ C:\STM32Toolchain\teammmd\I2Cproject\Drivers\CMSIS\Device\ST\STM32L1xx\Include
 -I
 C:\STM32Toolchain\teammmd\I2Cproject\Drivers\CMSIS\Include
 -I
-C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\CMSIS\Include
--DUSE_HAL_DRIVER=1
--DSTM32L152xE=1
+C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\CMSIS\Include
 -D__CHAR_BITS__=8
 -D__CHAR_MAX__=0xff
 -D__CHAR_MIN__=0
@@ -147,6 +145,16 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\CMSIS\Include
 -D__INTMAX_C_SUFFIX__=LL
 -D__UINTMAX_C_SUFFIX__=ULL
 -D__INTMAX_SIZE_PREFIX__="ll"
+-D__ATOMIC_BOOL_LOCK_FREE=2
+-D__ATOMIC_CHAR_LOCK_FREE=2
+-D__ATOMIC_CHAR16_T_LOCK_FREE=2
+-D__ATOMIC_CHAR32_T_LOCK_FREE=2
+-D__ATOMIC_WCHAR_T_LOCK_FREE=2
+-D__ATOMIC_SHORT_LOCK_FREE=2
+-D__ATOMIC_INT_LOCK_FREE=2
+-D__ATOMIC_LONG_LOCK_FREE=2
+-D__ATOMIC_LLONG_LOCK_FREE=0
+-D__ATOMIC_POINTER_LOCK_FREE=2
 -D__FLOAT_SIZE__=4
 -D__FLOAT_ALIGN__=4
 -D__DOUBLE_SIZE__=8
@@ -160,24 +168,24 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\CMSIS\Include
 -D__PTRDIFF_T_TYPE__=signed int
 -D__PTRDIFF_T_MAX__=2147483647
 -D__PTRDIFF_T_MIN__=(-__PTRDIFF_T_MAX__-1)
--D__INTPTR_T_TYPE__=signed long int
--D__INTPTR_T_MAX__=2147483647L
+-D__INTPTR_T_TYPE__=signed int
+-D__INTPTR_T_MAX__=2147483647
 -D__INTPTR_T_MIN__=(-__INTPTR_T_MAX__-1)
--D__UINTPTR_T_TYPE__=unsigned long int
--D__UINTPTR_T_MAX__=0xffffffffUL
--D__INTPTR_SIZE_PREFIX__="l"
+-D__UINTPTR_T_TYPE__=unsigned int
+-D__UINTPTR_T_MAX__=0xffffffffU
+-D__INTPTR_SIZE_PREFIX__=""
 -D__JMP_BUF_ELEMENT_TYPE__=unsigned long long int
 -D__JMP_BUF_NUM_ELEMENTS__=8
 -D__TID__=0xcf60
--D__VER__=7080001
--D__BUILD_NUMBER__=11864
--D__IAR_SYSTEMS_ICC__=8
+-D__VER__=8010001
+-D__BUILD_NUMBER__=12857
+-D__IAR_SYSTEMS_ICC__=9
 -D__LITTLE_ENDIAN__=1
 -D__BOOL_TYPE__=unsigned char
 -D__BOOL_SIZE__=1
--D__WCHAR_T_TYPE__=unsigned short int
--D__WCHAR_T_SIZE__=2
--D__WCHAR_T_MAX__=0xffff
+-D__WCHAR_T_TYPE__=unsigned long int
+-D__WCHAR_T_SIZE__=4
+-D__WCHAR_T_MAX__=0xffffffffU
 -D__DEF_PTR_MEM__=__data
 -D__DEF_PTR_SIZE__=4
 -D__CODE_MEMORY_LIST3__(_P1,_P2)=__CODE_MEM_HELPER3__(__code, 0, _P1, _P2)
@@ -189,14 +197,14 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\CMSIS\Include
 -D__DATA_MEM0_INTPTR_TYPE__=int
 -D__DATA_MEM0_UINTPTR_TYPE__=unsigned int
 -D__DATA_MEM0_INTPTR_SIZE_PREFIX__=""
--D__DATA_MEM0_MAX_SIZE__=0x7fffffff
+-D__DATA_MEM0_MAX_SIZE__=0x7fffffffU
+-D_RSIZE_MAX=0x7fffffffU
 -D__DATA_MEM0_HEAP_SEGMENT__="HEAP"
 -D__DATA_MEM0_PAGE_SIZE__=0
 -D__DATA_MEM0_HEAP__=0
 -D__CODE_MEM0__=__code
 -D__CODE_MEM0_POINTER_OK__=1
 -D__CODE_MEM0_UNIQUE_POINTER__=1
--D__CODE_MEM0_VAR_OK__=1
 -D__CODE_PTR_MEMORY_LIST3__(_P1,_P2)=__CODE_PTR_MEM_HELPER3__(__code, 0, _P1, _P2)
 -D__DATA_PTR_MEMORY_LIST3__(_P1,_P2)=__DATA_PTR_MEM_HELPER3__(__data, 0, _P1, _P2)
 -D__VAR_MEMORY_LIST3__(_P1,_P2)=__VAR_MEM_HELPER3__(__data, 0, _P1, _P2)
@@ -237,18 +245,32 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\CMSIS\Include
 -D__HAS_JOINED_TYPES__=1
 -D__HAS_LOCATED_DECLARATION__=1
 -D__HAS_LOCATED_WITH_INIT__=1
--D__IAR_COMPILERBASE__=595201
+-D__IAR_COMPILERBASE__=655617
+-D__IAR_COMPILERBASE_STR__=10.1.1.179
+-D__UNICODE_SOURCE_SUPPORTED__=1
 -D__STDC__=1
--D__STDC_VERSION__=199901L
+-D__STDC_VERSION__=201112L
 -D__STDC_HOSTED__=1
 -D__STDC_NO_VLA__=1
--D__STDC_NO_ATOMICS__=1
+-D__MEMORY_ORDER_RELAXED__=0
+-D__MEMORY_ORDER_CONSUME__=1
+-D__MEMORY_ORDER_ACQUIRE__=2
+-D__MEMORY_ORDER_RELEASE__=3
+-D__MEMORY_ORDER_ACQ_REL__=4
+-D__MEMORY_ORDER_SEQ_CST__=5
+-D__STDC_UTF_16__=1
+-D__STDC_UTF_32__=1
+-D__STDC_LIB_EXT1__=201112L
+-D__STDC_NO_THREADS__=1
+-D__STDC_ISO_10646__=201103L
 -D__EDG_IA64_ABI=1
 -D__EDG_IA64_ABI_VARIANT_CTORS_AND_DTORS_RETURN_THIS=1
 -D__EDG_IA64_ABI_USE_INT_STATIC_INIT_GUARD=1
+-D__cpp_unicode_literals=200710
+-D__cpp_static_assert=200410
 -D__EDG_TYPE_TRAITS_ENABLED=1
 -D__EDG__=1
--D__EDG_VERSION__=410
+-D__EDG_VERSION__=412
 -D__EDG_SIZE_TYPE__=unsigned int
 -D__EDG_PTRDIFF_TYPE__=int
 -D__EDG_DELTA_TYPE=int
@@ -264,9 +286,11 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\CMSIS\Include
 -D__EDG_SYSV=0
 -D__EDG_ANSIC=1
 -D__EDG_CPP11_IL_EXTENSIONS_SUPPORTED=1
--D_DLIB_CONFIG_FILE_HEADER_NAME="C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\INC\c\DLib_Config_Full.h"
--D_DLIB_CONFIG_FILE_STRING="C:\\Program Files (x86)\\IAR Systems\\Embedded Workbench 7.5\\arm\\INC\\c\\DLib_Config_Full.h"
--D__VERSION__="IAR ANSI C/C++ Compiler V7.80.1.11864/W32 for ARM"
+-DUSE_HAL_DRIVER=1
+-DSTM32L152xE=1
+-D_DLIB_CONFIG_FILE_HEADER_NAME=u8"C:\\Program Files (x86)\\IAR Systems\\Embedded Workbench 8.0\\arm\\INC\\c\\DLib_Config_Full.h"
+-D_DLIB_CONFIG_FILE_STRING=u8"C:\\Program Files (x86)\\IAR Systems\\Embedded Workbench 8.0\\arm\\INC\\c\\DLib_Config_Full.h"
+-D__VERSION__="IAR ANSI C/C++ Compiler V8.10.1.12857/W32 for ARM"
 -D__CODE_MEMORY_LIST1__()=__CODE_MEM_HELPER1__(__code, 0 )
 -D__CODE_MEMORY_LIST2__(_P1)=__CODE_MEM_HELPER2__(__code, 0 ,  _P1 )
 -D__CODE_MEMORY_LIST3__(_P1, _P2)=__CODE_MEM_HELPER3__(__code, 0 ,  _P1 ,  _P2 )
