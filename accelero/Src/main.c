@@ -30,12 +30,12 @@ void Error_Handler(void);
 //void MAG3110_WRITE_REGISTER(uint8_t reg, uint8_t val);
 //uint8_t MAG3110_READ_REGISTER(uint8_t reg);
 
-uint8_t MAG3110_READ_REGISTER(uint8_t reg);
-void MAG3110_WRITE_REGISTER(uint8_t reg, uint8_t val);
-int MAG3110_Init(void);
-int16_t MAG3110_ReadRawData_x(void);
-int16_t MAG3110_ReadRawData_y(void);
-int16_t MAG3110_ReadRawData_z(void);
+uint8_t MMA8491Q_READ_REGISTER(uint8_t reg);
+void MMA8491Q_WRITE_REGISTER(uint8_t reg, uint8_t val);
+int MMA8491Q_Init(void);
+int16_t MMA8491Q_ReadRawData_x(void);
+int16_t MMA8491Q_ReadRawData_y(void);
+int16_t MMA8491Q_ReadRawData_z(void);
 
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
@@ -61,9 +61,9 @@ int main(void)
   while (1)
   { 
     //register settings: http://www.nxp.com/assets/documents/data/en/data-sheets/MAG3110.pdf
-     int16_t x = MAG3110_ReadRawData_x();
-     int16_t y = MAG3110_ReadRawData_y();
-     int16_t z = MAG3110_ReadRawData_z();
+     int16_t x = MMA8491Q_ReadRawData_x();
+     int16_t y = MMA8491Q_ReadRawData_y();
+     int16_t z = MMA8491Q_ReadRawData_z();
      
      printf("x: : %d , y: : %d , z: : %d  \r \n", x, y, z);
      
@@ -73,29 +73,30 @@ int main(void)
 }
 
 
+// pin hoog zetten en regs lezen
 
-uint8_t MAG3110_READ_REGISTER(uint8_t reg) {
+uint8_t MMA8491Q_READ_REGISTER(uint8_t reg) {
 	//char* ch = malloc(1);
 	//bcm2835_i2c_read_register_rs(&reg, ch, 1);
 	//return ch[0];
         uint8_t status3;
         //0X0E = The 7-bit I2C slave address 
-        int status2 = HAL_I2C_Mem_Read(&hi2c1, 0x0e, reg, I2C_MEMADD_SIZE_8BIT, &status3, 1, HAL_MAX_DELAY);
+        int status2 = HAL_I2C_Mem_Read(&hi2c1, 0x55 << 1, reg, I2C_MEMADD_SIZE_8BIT, &status3, 1, HAL_MAX_DELAY);
         return status3;
 }
 
 
-void MAG3110_WRITE_REGISTER(uint8_t reg, uint8_t val) {
+void MMA8491Q(uint8_t reg, uint8_t val) {
 	//bcm2835_i2c_setSlaveAddress(14);
 	//bcm2835_i2c_write(&x, 2);
 
         uint8_t arr[] = {reg, val};
         //0X0E = The 7-bit I2C slave address 
-        int status=HAL_I2C_Master_Transmit(&hi2c1, 0x0e, arr, 2, HAL_MAX_DELAY);
+        int status=HAL_I2C_Master_Transmit(&hi2c1, 0x55 << 1, arr, 2, HAL_MAX_DELAY);
 }
 
 
-int MAG3110_Init() {
+int MMA8491Q_Init() {
 	char v = 0;
        
         MAG3110_WRITE_REGISTER(16, 2);  /*CTRL_REG1 0 schrijven*/ 
@@ -110,28 +111,6 @@ int MAG3110_Init() {
 }
 
 
-/*NOT NEEDED*/
-/*int MAG3110_BULK_READ(char reg, char count, char* data) {
-	bcm2835_i2c_setSlaveAddress(14);
-	bcm2835_i2c_read_register_rs(&reg, data, count);
-	return *data;
-}
-
-
-char MAG3110_ReadRawData(char* data) {
-	char a = 0;
-	short b = 0;
-	if (MAG3110_Initialized == 1) {
-		MAG3110_WRITE_REGISTER(17, 128);
-		MAG3110_WRITE_REGISTER(16, 2);
-		do {
-			a = MAG3110_READ_REGISTER(0);
-		} while ((a & 7) != 7);
-		MAG3110_BULK_READ(1, 6, data);
-	}
-	return 1;
-}
-*/
 
 int16_t MAG3110_ReadRawData_x() {
         char r = 0;
@@ -150,43 +129,6 @@ int16_t MAG3110_ReadRawData_x() {
 	}	
 	return a;
 }
-
-int16_t MAG3110_ReadRawData_y() {
-        char r = 0;
-	int16_t a = 0;
-	if (MAG3110_Initialized == 1) {
-		a = MAG3110_READ_REGISTER(3);
-		a = MAG3110_READ_REGISTER(4);
-		MAG3110_WRITE_REGISTER(17, 128); //(0x11, 0x80 ) = CTRL_REG2 Automatic magnetic sensor resets enabled 
-		MAG3110_WRITE_REGISTER(16, 2); //(0x10, 0x02 ) = CTRL_REG1 = Fast read mode 
-		do {
-			r = MAG3110_READ_REGISTER(0);
-		} while (!(r & 2));
-		a = MAG3110_READ_REGISTER(3);
-		a = a << 8;
-		a = a + MAG3110_READ_REGISTER(4);
-	}	
-	return a;
-}
-
-int16_t MAG3110_ReadRawData_z() {
-        char r = 0;
-	int16_t a = 0;
-	if (MAG3110_Initialized == 1) {
-		a = MAG3110_READ_REGISTER(5);
-		a = MAG3110_READ_REGISTER(6);
-		MAG3110_WRITE_REGISTER(17, 128); //(0x11, 0x80 ) = CTRL_REG2 Automatic magnetic sensor resets enabled 
-		MAG3110_WRITE_REGISTER(16, 2);  //(0x10, 0x02 ) = CTRL_REG1 = Fast read mode 
-		do {
-			r = MAG3110_READ_REGISTER(0);
-		} while (!(r & 4));
-		a = MAG3110_READ_REGISTER(5);
-		a = a << 8;
-		a = a + MAG3110_READ_REGISTER(6);
-	}	
-	return a;
-}
-
 
 
 void SystemClock_Config(void)
