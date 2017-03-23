@@ -30,6 +30,8 @@
   *
   ******************************************************************************
   */
+
+
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32l1xx_hal.h"
@@ -59,6 +61,7 @@ UART_HandleTypeDef huart2;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void Error_Handler(void);
+void Dash7Send(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART1_UART_Init(void);
@@ -95,7 +98,8 @@ int main(void)
   MX_USART2_UART_Init();
 
   /* USER CODE BEGIN 2 */
-
+    uint8_t opt = 0;
+    char readBuf[1];
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -105,13 +109,103 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_RESET) {
+  /*  if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_RESET) {
 	          HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 	          HAL_Delay(500);
 	      }
+    
+    
+    HAL_UART_Receive(&huart1, (uint8_t*)readBuf, 1, HAL_MAX_DELAY);
+    opt = atoi(readBuf);
+    if (opt != 0) {
+        HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+        HAL_UART_Transmit(&huart2, (uint8_t*)readBuf, strlen(readBuf), HAL_MAX_DELAY);
+        printf("%c",readBuf);
+        HAL_Delay(100);
+        HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+    }*/
+    Dash7Send();
+    HAL_Delay(10000);
+    
   }
   /* USER CODE END 3 */
 
+}
+
+
+/*  
+    -----------------------------FULL COMMAND WITH DATA [0,1] -------------------
+    41 54 24 44 c0 00 0e b4 af 32 d7 01 00 10 01 20 01 00 02 00 01 
+    0x41 0x54 0x24 0x44 0xc0 0x00 0x0e 0xb4 0xaf 0x32 0xd7 0x01 0x00 0x10 0x01 0x20 0x01 0x00 0x02 0x00 0x01
+    $41 $54 $24 $44 $c0 $00 $0e $b4 $af $32 $d7 $01 $00 $10 $01 $20 $01 $00 $02 $00 $01
+    
+            ---------------------SERIALIZE------------------------
+    41 54 24 44 c0 00 0e
+    
+        STATIC SER       LENGTH
+    [41 54 24 44 c0 00]  [0e]
+    
+    ++++++++++++++++ LENGTH ++++++++++++++++
+    Length of bytes of the ALP COMMAND
+    
+    0e --> 14 --> Length
+    
+            ---------------------ALP COMMAND----------------------
+    34 af 32 d7 01 00 10 01 20 01 00 02 00 01
+    
+      TAG         FORWARD         RETURN FILE DATA 
+    [34 af] [32 d7 01 00 10 01] [20 01 00 02 00 01]
+    
+    ++++++++++++++++ TAG ++++++++++++++++
+    
+    ALP COMMAND: 
+    34 af
+    
+    34 --> 52   --> Request Tag
+    af --> 175  --> Tag Value (random)
+    
+    PARSED: Command with tag 175 (executing)
+    
+    ++++++++++++++++ FORWARD ++++++++++++++++
+    
+    ALP COMMAND:
+    32 d7 01 00 10 01
+    
+    32 --> 50    --> Forward
+    d7 --> 215   --> Interface Name (D7ASP)
+    01 --> 01    --> ResponseMode.RESP_MODE_ANY
+    00 --> 00    --> mant
+    10 --> 16    --> ??
+    01 --> 01    --> access_class
+    
+    PARSED:
+    actions:
+	action: Forward: interface-id=InterfaceType.D7ASP, configuration={'addressee': {'nls_method': <NlsMethod.NONE: 0>, 'access_class': 1,
+            '__CLASS__': 'Addressee', 'id_type': <IdType.NOID: 1>, 'id': None}, 'qos': {'record': False, 'resp_mod': <ResponseMode.RESP_MODE_ALL: 1>, 
+            '__CLASS__': 'QoS', 'retry_mod': <RetryMode.RETRY_MODE_NO: 0>, 'stop_on_err': False}, '__CLASS__': 'Configuration', 'dorm_to': {'mant': 0, '__CLASS__': 'CT', 'exp': 0}}
+
+    ++++++++++++++ RETURN FILE DATA ++++++++++++++++
+    
+    ALP COMMAND:
+    20 01 00 02 00 01
+    
+    20 --> 32   --> Return File Data
+    01 --> 01   --> File ID
+    00 --> 00   --> Offset
+    02 --> 02   --> Length data bytes
+    
+    <DATA> [0,1] LENGTH:2
+    00 --> 00
+    00 --> 01
+    
+    PARSED:
+    actions:
+        action: ReturnFileData: file-id=1, size=1, offset=0, length=2, data=[0, 1]
+*/
+void Dash7Send(void)
+{
+  uint8_t message[] = {0x41, 0x54, 0x24, 0x44, 0xc0, 0x00, 0x0e, 0xb4, 0xaf, 0x32, 0xd7, 0x01, 0x00, 0x10, 0x01, 0x20, 0x01, 0x00, 0x02, 0x00, 0x01};
+  HAL_UART_Transmit(&huart1, (uint8_t*)message, sizeof(message), HAL_MAX_DELAY);
 }
 
 /** System Clock Configuration
@@ -165,6 +259,7 @@ void SystemClock_Config(void)
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
+
 
 /* I2C1 init function */
 static void MX_I2C1_Init(void)
