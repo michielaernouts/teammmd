@@ -35,7 +35,6 @@
 #include "stm32l1xx.h"
 #include "stm32l1xx_it.h"
 
-
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -51,14 +50,10 @@
 */
 void SysTick_Handler(void)
 {
-  /* USER CODE BEGIN SysTick_IRQn 0 */
 
-  /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   HAL_SYSTICK_IRQHandler();
-  /* USER CODE BEGIN SysTick_IRQn 1 */
 
-  /* USER CODE END SysTick_IRQn 1 */
 }
 
 /******************************************************************************/
@@ -71,6 +66,7 @@ void SysTick_Handler(void)
 /**
 * @brief This function handles EXTI line[15:10] interrupts.
 */
+
 void EXTI15_10_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI15_10_IRQn 0 */
@@ -79,32 +75,24 @@ void EXTI15_10_IRQHandler(void)
 				 //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 				 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 				 //HAL_UART_Transmit(&huart2, (uint8_t*)"Motion detected\n", strlen("Motion detected\n"), HAL_MAX_DELAY);
-
 				  sprintf(str, "Motion detected\n");
-
 			}
 			else if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10) == 0)
 			{
 				//  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, RESET);
-
 				 HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 				 //HAL_UART_Transmit(&huart2, (uint8_t*)"No motion detected\n", strlen("No motion detected\n"), HAL_MAX_DELAY);
 				 sprintf(str, "No motion detected\n");
-
-
 			}*/
 
 	/*
-
-
   /* USER CODE END EXTI15_10_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_10);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_12);
+
+  
   /* USER CODE BEGIN EXTI15_10_IRQn 1 */
 
   /* USER CODE END EXTI15_10_IRQn 1 */
 }
-
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

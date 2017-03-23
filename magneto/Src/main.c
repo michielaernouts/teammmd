@@ -26,12 +26,28 @@ int MAG3110_Init(void);
 int16_t MAG3110_ReadRawData_x(void);
 int16_t MAG3110_ReadRawData_y(void);
 int16_t MAG3110_ReadRawData_z(void);
+float RAW_TO_TESLA(float);
+
+
+#define MAG_3110_CTRL_REG1 0x10
+#define MAG_3110_CTRL_REG2 0x11
+
 
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART2_UART_Init(void);
 
 int MAG3110_Initialized = 0;
+
+/*
+Project notes: 
+UART2 and I2C1 enabled
+PIN PB6 = SDC
+PIN PB7 = SDA
+
+To get bigger and negative values from the sensor, change uint8_t to int16_t in main while loop. 
+The data of x, y and z are 2 registers each so int16_t should be correcter in my opinion.
+*/
 
 int main(void)
 {
@@ -46,20 +62,36 @@ int main(void)
   MX_USART2_UART_Init();
 
   MAG3110_Init();
- 
+  
   while (1)
   { 
     //register settings: http://www.nxp.com/assets/documents/data/en/data-sheets/MAG3110.pdf
+     uint8_t x = MAG3110_ReadRawData_x();
+     uint8_t y = MAG3110_ReadRawData_y();
+     uint8_t z = MAG3110_ReadRawData_z();
+    /* 
      int16_t x = MAG3110_ReadRawData_x();
      int16_t y = MAG3110_ReadRawData_y();
      int16_t z = MAG3110_ReadRawData_z();
+     */
      
-    // printf("x: : %d , y: : %d , z: : %d  \r \n", x, y, z);
+     printf("x: %d | y:  %d | z: %d  \r \n", x, y, z);
+    //printf("%f", RAW_TO_TESLA(x));
      
-     HAL_Delay(10);
+     /* or bigger */
+     HAL_Delay(150); 
   }
 }
 
+/* Not working correct
+float RAW_TO_TESLA(float raw_x,float raw_z,float raw_z)
+{
+    float x_in_tesla = (raw_x* 0.1f);
+    float y_in_tesla = (raw_y* 0.1f);
+    float z_in_tesla = (raw_z* 0.1f);
+
+  return x_in_tesla;
+}*/
 
 uint8_t MAG3110_READ_REGISTER(uint8_t reg) {
         uint8_t status3;
@@ -79,11 +111,12 @@ void MAG3110_WRITE_REGISTER(uint8_t reg, uint8_t val) {
 int MAG3110_Init() {
 	char v = 0;
        
-        MAG3110_WRITE_REGISTER(16, 0);  /* CTRL_REG1 0 schrijven */ 
+        MAG3110_WRITE_REGISTER(MAG_3110_CTRL_REG1, 0);  /* CTRL_REG1 0 schrijven */ 
 	v = MAG3110_READ_REGISTER(7); /* WHO_AM_I lezen default value = 0xc4 */
-        printf("%s",v);
+        printf("%d",v);
         if (v == 0xc4) {  //0xc4 = default value of reg 7
-		MAG3110_WRITE_REGISTER(17, 128);  //CTRL_REG_2 schrijven AUTO_MRST_EN = 1 (0x80 = 128)
+		MAG3110_WRITE_REGISTER(MAG_3110_CTRL_REG2, 128);  //CTRL_REG_2 schrijven AUTO_MRST_EN = 1 (0x80 = 128)
+                MAG3110_WRITE_REGISTER(MAG_3110_CTRL_REG1, 1); /*TEST Added*/
 		MAG3110_Initialized = 1;
 	}
 	return MAG3110_Initialized;   
@@ -119,8 +152,8 @@ int16_t MAG3110_ReadRawData_x() {
 	if (MAG3110_Initialized == 1) {
 		a = MAG3110_READ_REGISTER(1); // reg 1 and 2 contain x value
 		a = MAG3110_READ_REGISTER(2);
-		MAG3110_WRITE_REGISTER(17, 128); //(0x11, 0x80 ) = CTRL_REG2 Automatic magnetic sensor resets enabled
-		MAG3110_WRITE_REGISTER(16, 2); //(0x10, 0x02 ) = CTRL_REG1 = Fast read mode 
+		MAG3110_WRITE_REGISTER(MAG_3110_CTRL_REG2, 128); //(0x11, 0x80 ) = CTRL_REG2 Automatic magnetic sensor resets enabled
+		MAG3110_WRITE_REGISTER(MAG_3110_CTRL_REG1, 2); //(0x10, 0x02 ) = CTRL_REG1 = Fast read mode 
 		do {
 			r = MAG3110_READ_REGISTER(0);
 		} while (!(r & 1));
@@ -137,8 +170,8 @@ int16_t MAG3110_ReadRawData_y() {
 	if (MAG3110_Initialized == 1) {
 		a = MAG3110_READ_REGISTER(3); // reg 3 and 4 contain y value
 		a = MAG3110_READ_REGISTER(4);
-		MAG3110_WRITE_REGISTER(17, 128); //(0x11, 0x80 ) = CTRL_REG2 Automatic magnetic sensor resets enabled 
-		MAG3110_WRITE_REGISTER(16, 2); //(0x10, 0x02 ) = CTRL_REG1 = Fast read mode 
+		MAG3110_WRITE_REGISTER(MAG_3110_CTRL_REG2, 128); //(0x11, 0x80 ) = CTRL_REG2 Automatic magnetic sensor resets enabled 
+		MAG3110_WRITE_REGISTER(MAG_3110_CTRL_REG1, 2); //(0x10, 0x02 ) = CTRL_REG1 = Fast read mode 
 		do {
 			r = MAG3110_READ_REGISTER(0);
 		} while (!(r & 2));
@@ -155,8 +188,8 @@ int16_t MAG3110_ReadRawData_z() {
 	if (MAG3110_Initialized == 1) {
 		a = MAG3110_READ_REGISTER(5); // reg 5 and 6 contain z value
 		a = MAG3110_READ_REGISTER(6);
-		MAG3110_WRITE_REGISTER(17, 128); //(0x11, 0x80 ) = CTRL_REG2 Automatic magnetic sensor resets enabled 
-		MAG3110_WRITE_REGISTER(16, 2);  //(0x10, 0x02 ) = CTRL_REG1 = Fast read mode 
+		MAG3110_WRITE_REGISTER(MAG_3110_CTRL_REG2, 128); //(0x11, 0x80 ) = CTRL_REG2 Automatic magnetic sensor resets enabled 
+		MAG3110_WRITE_REGISTER(MAG_3110_CTRL_REG1, 2);  //(0x10, 0x02 ) = CTRL_REG1 = Fast read mode 
 		do {
 			r = MAG3110_READ_REGISTER(0);
 		} while (!(r & 4));
@@ -307,11 +340,6 @@ static void MX_GPIO_Init(void)
 
 }
 
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @param  None
-  * @retval None
-  */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler */
@@ -324,13 +352,6 @@ void Error_Handler(void)
 
 #ifdef USE_FULL_ASSERT
 
-/**
-   * @brief Reports the name of the source file and the source line number
-   * where the assert_param error has occurred.
-   * @param file: pointer to the source file name
-   * @param line: assert_param error line source number
-   * @retval None
-   */
 void assert_failed(uint8_t* file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
