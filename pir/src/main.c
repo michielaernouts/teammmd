@@ -1,90 +1,71 @@
-/**
-  ******************************************************************************
-  * File Name          : main.c
-  * Description        : Main program body
-  ******************************************************************************
-  *
-  * COPYRIGHT(c) 2017 STMicroelectronics
-  *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  *
-  ******************************************************************************
-  */
-/* Includes ------------------------------------------------------------------*/
+/*
+ *  Program shows general working of PIR sensor, a led is flashed when there is movement detected
+ *  Add 18 kOhm resistor and 270nF or 470 nF capacitor (lowpass filter) to output of sensor, to stabilize the current flow and debounce
+ *  Further research has to be done (biger resistor and capacitor)
+ * For the led a resistor of 5 kOhm is used
+ *
+ *
+ *  Configuration in STMCubeMX:
+ *  ---------------------------
+ *  Pin => PA10 external interrupt
+ *  Pin => PB5 as GPIO output (for led)
+ *  Add USART 2 asynchronous
+ *  Add I2C1
+ *  go to configuration => select "Pull down"
+ *  go to NVIC => mark the enabled field of "EXTI_line [15:10] interrupts"
+ */
+
 #include "main.h"
 #include "stm32l1xx_hal.h"
 
+#ifdef __GNUC__
+/* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
+   set to 'Yes') calls __io_putchar() */
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
 
-/* Private variables ---------------------------------------------------------*/
+
 I2C_HandleTypeDef hi2c1;
-
 UART_HandleTypeDef huart2;
 
-
-/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void Error_Handler(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART2_UART_Init(void);
 
+void LIGHT_ON(void);
+void LIGHT_OFF(void);
+
 int main(void)
 {
-  /* MCU Configuration----------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
-  /* Configure the system clock */
   SystemClock_Config();
 
-  /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_USART2_UART_Init();
   
-  
 
  while (1)
   {
-  /* USER CODE END WHILE */
-	  //HAL_GPIO_EXTI_Callback(GPIO_PIN_10);
-  /* USER CODE BEGIN 3 */
-	/*  if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10) == 1)
-	  	{
-	  		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	  		HAL_UART_Transmit(&huart2, (uint8_t*)"Motion detected\n", strlen("Motion detected\n"), HAL_MAX_DELAY);
-	  	}
-	  	else if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10) == 0)
-	  	{
-	  		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
-	  		HAL_UART_Transmit(&huart2, (uint8_t*)"No motion detected\n", strlen("No motion detected\n"), HAL_MAX_DELAY);
-	  		sprintf(str, "No motion detected\n");
-	  	}*/
-    
 
   }
 
+}
+
+void LIGHT_ON()
+{
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
+  printf("Motion \n");   
+}
+
+void LIGHT_OFF()
+{
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
+  printf("...\n");   
 }
 
 /** System Clock Configuration
@@ -162,7 +143,6 @@ static void MX_I2C1_Init(void)
 /* USART2 init function */
 static void MX_USART2_UART_Init(void)
 {
-
   huart2.Instance = USART2;
   huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
@@ -178,16 +158,8 @@ static void MX_USART2_UART_Init(void)
 
 }
 
-/** Configure pins as 
-        * Analog 
-        * Input 
-        * Output
-        * EVENT_OUT
-        * EXTI
-*/
 static void MX_GPIO_Init(void)
 {
-
   GPIO_InitTypeDef GPIO_InitStruct;
 
   /* GPIO Ports Clock Enable */
@@ -198,6 +170,9 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+  
+    /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -214,85 +189,65 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : PA10 */
   GPIO_InitStruct.Pin = GPIO_PIN_10;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
   
+  /*Configure GPIO pin : PB5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_5;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
   
-GPIO_InitStruct.Pin = GPIO_PIN_13 | GPIO_PIN_12;
-GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  GPIO_InitStruct.Pin = GPIO_PIN_13 | GPIO_PIN_12;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
-
 }
 
 
 
-/*
- *  ADD 18k and 270nF or 470 nF resistor to output of sensor, to stabilize the current flow
- *  in STMCubeMX:
- *  Pin => PA10 external interrupt
- *  Add USART 2 asynchronous
- *  Add A2C1
- *  go to configuration => select "Pull down"
- *  go to NVIC => mark the enabled field of "EXTI_line [15:10] interrupts"
- */
-
-
-// If rising edge detected, print message to UART2
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
-  HAL_UART_Transmit(&huart2, (uint8_t*)"Motion detected\n", strlen("Motion detected\n"), HAL_MAX_DELAY);
   
-  // set a pin high after delay low again
-  
-	//if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10) == 1)
-  //{
-             //   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
-		//HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		//HAL_UART_Transmit(&huart2, (uint8_t*)"Motion detected\n", strlen("Motion detected\n"), HAL_MAX_DELAY);
-	//}
-        //else if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10) == 0)
-	//else if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10) < 1) /*Not working for some reason*/
-	//{ 
-          //     
-            //    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
-		//HAL_UART_Transmit(&huart2, (uint8_t*)"No motion detected\n", strlen("No motion detected\n"), HAL_MAX_DELAY);
-	
-	//}
-
-    // set in apart function
-    HAL_GPIO_WritePin(HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
-    HAL_Delay(10000); //  in miliseconds
-    HAL_GPIO_WritePin(HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
-  
-  
+    if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10) == 1)
+    {
+      LIGHT_ON();
+    }
+    else if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10) == 0)
+    {
+      LIGHT_OFF();
+    }
+ 
+     //HAL_UART_Transmit(&huart2, (uint8_t*)"Motion detected\n", strlen("Motion detected\n"), HAL_MAX_DELAY);
+     //HAL_UART_Transmit(&huart2, (uint8_t*)"No motion detected\n", strlen("No motion detected\n"), HAL_MAX_DELAY);
 }
 
 void Error_Handler(void)
 {
-  /* USER CODE BEGIN Error_Handler */
-  /* User can add his own implementation to report the HAL error return state */
   while(1) 
   {
   }
-  /* USER CODE END Error_Handler */ 
 }
 
 #ifdef USE_FULL_ASSERT
 
 void assert_failed(uint8_t* file, uint32_t line)
 {
-  /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-    ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* USER CODE END 6 */
 
 }
 
 #endif
+
+PUTCHAR_PROTOTYPE
+{
+  /* Place your implementation of fputc here */
+  /* e.g. write a character to the USART3 and Loop until the end of transmission */
+  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
+
+  return ch;
+}
