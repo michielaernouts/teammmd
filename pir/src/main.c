@@ -1,8 +1,7 @@
 /*
  *  Program shows general working of PIR sensor, a led is flashed when there is movement detected
- *  Add 18 kOhm resistor and 270nF or 470 nF capacitor (lowpass filter) to output of sensor, to stabilize the current flow and debounce
- *  Further research has to be done (biger resistor and capacitor)
- * For the led a resistor of 5 kOhm is used
+ *  Add 22 kOhm resistor and 6.8µF capacitor (low pass filter) to output of sensor, to stabilize the current flow and debounce
+ * For the LED a resistor of 5 kOhm is used, this can deviate depending on the used LED. 
  *
  *
  *  Configuration in STMCubeMX:
@@ -65,7 +64,7 @@ void LIGHT_ON()
 void LIGHT_OFF()
 {
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
-  printf("...\n");   
+  printf("No motion\n");   
 }
 
 /** System Clock Configuration

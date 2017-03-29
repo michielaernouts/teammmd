@@ -1,39 +1,40 @@
 ###############################################################################
 #
-# IAR ELF Linker V8.10.1.12857/W32 for ARM                25/Mar/2017  15:16:45
+# IAR ELF Linker V8.10.1.12857/W32 for ARM                29/Mar/2017  09:30:42
 # Copyright 2007-2017 IAR Systems AB.
 #
 #    Output file  =  
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Exe\PIR.out
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Exe\PIR.out
 #    Map file     =  
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\List\PIR.map
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\List\PIR.map
 #    Command line =  
-#        -f C:\Users\Dennis\AppData\Local\Temp\EW5FE5.tmp
-#        (C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\main.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\startup_stm32l152xe.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal_cortex.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal_dma.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal_flash.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal_flash_ex.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal_flash_ramfunc.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal_gpio.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal_i2c.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal_msp.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal_pwr.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal_pwr_ex.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal_rcc.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal_rcc_ex.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal_tim.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal_tim_ex.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_hal_uart.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\stm32l1xx_it.o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj\system_stm32l1xx.o
+#        -f C:\Users\Dennis\AppData\Local\Temp\EW5EA5.tmp
+#        (C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\main.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\startup_stm32l152xe.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal_cortex.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal_dma.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal_flash.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal_flash_ex.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal_flash_ramfunc.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal_gpio.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal_i2c.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal_msp.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal_pwr.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal_pwr_ex.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal_rcc.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal_rcc_ex.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal_tim.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal_tim_ex.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_hal_uart.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\stm32l1xx_it.o
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj\system_stm32l1xx.o
 #        --redirect _Printf=_PrintfFull --redirect _Scanf=_ScanfFull -o
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Exe\PIR.out --map
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\List\PIR.map
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Exe\PIR.out
+#        --map
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\List\PIR.map
 #        --config
-#        C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM/stm32l152xe_flash.icf
+#        C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM/stm32l152xe_flash.icf
 #        --semihosting --entry __iar_program_start --vfe --text_out locale)
 #
 ###############################################################################
@@ -240,7 +241,7 @@ Copy/packbits (__iar_packbits_init_single3)
 
     Module                  ro code  ro data  rw data
     ------                  -------  -------  -------
-C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj: [1]
+C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj: [1]
     main.o                      624               148
     startup_stm32l152xe.o       556
     stm32l1xx_hal.o              90                 4
@@ -474,7 +475,7 @@ strlen                  0x08001171         Code  Gb  strlen.o [5]
 uwTick                  0x200005b4    0x4  Data  Gb  stm32l1xx_hal.o [1]
 
 
-[1] = C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\PIR\Obj
+[1] = C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\PIR\Obj
 [2] = command line
 [3] = dl7M_tlf.a
 [4] = m7M_tl.a

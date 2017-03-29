@@ -23,9 +23,9 @@ param([String]$debugfile = "");
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\settings\PIR.PIR.general.xcl" --backend -f "C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\settings\PIR.PIR.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\settings\PIR.PIR.general.xcl" --backend -f "C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\settings\PIR.PIR.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\settings\PIR.PIR.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\Dennis\Desktop\iar_projects\PIR\EWARM\settings\PIR.PIR.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\settings\PIR.PIR.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\Dennis\Desktop\iar_projects\working\PIR\EWARM\settings\PIR.PIR.driver.xcl" 
 }
