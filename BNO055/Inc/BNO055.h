@@ -411,3 +411,6 @@ enum {MT_P0 = 0, MT_P1, MT_P2, MT_P3, MT_P4, MT_P5, MT_P6, MT_P7};
 #define GYRO_DURN_Z             0x1d
 #define GYRO_ANY_MOTION_THRES   0x1e
 #define GYRO_ANY_MOTION_SET     0x1f
+
+  
+ #endif

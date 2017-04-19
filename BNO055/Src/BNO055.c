@@ -1,6 +1,7 @@
 #include "main.h"
 #include "stm32l1xx_hal.h"
 #include "BNO055.h"
+#include <stdbool.h>
 
 /*
 BNO055::BNO055 (PinName p_sda, PinName p_scl, PinName p_reset) :
