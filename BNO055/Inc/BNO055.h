@@ -34,6 +34,230 @@
 #define I_AM_BNO055_MAG         0x32    // MAG ID
 #define I_AM_BNO055_GYR         0x0f    // GYR ID
 
+////////////// DATA TYPE DEFINITION ///////////////////////
+typedef struct {
+    uint8_t  chip_id;
+    uint8_t  acc_id;
+    uint8_t  mag_id;
+    uint8_t  gyr_id;
+    uint8_t  bootldr_rev_id;
+    uint16_t sw_rev_id;
+} BNO055_ID_INF_TypeDef;
+ 
+typedef struct {
+    double h;
+    double r;
+    double p;
+} BNO055_EULER_TypeDef;
+ 
+typedef struct {
+    int16_t x;
+    int16_t y;
+    int16_t z;
+    int16_t w;
+} BNO055_QUATERNION_TypeDef;
+ 
+typedef struct {
+    double x;
+    double y;
+    double z;
+} BNO055_LIN_ACC_TypeDef;
+ 
+typedef struct {
+    double x;
+    double y;
+    double z;
+} BNO055_GRAVITY_TypeDef;
+ 
+typedef struct {
+    int8_t acc_chip;
+    int8_t gyr_chip;
+} BNO055_TEMPERATURE_TypeDef;
+ 
+enum {MT_P0 = 0, MT_P1, MT_P2, MT_P3, MT_P4, MT_P5, MT_P6, MT_P7};
+ 
+/** Interface for Bosch Sensortec Intelligent 9-axis absolute orientation sensor
+ *      Chip: BNO055
+ *
+ * @code
+ * #include    "mbed.h"
+ * #include    "BNO055.h"
+ *
+ * Serial pc(USBTX,USBRX);
+ * I2C    i2c(PB_9, PB_8);         // SDA, SCL
+ * BNO055 imu(i2c, PA_8);          // Reset
+ *
+ * BNO055_ID_INF_TypeDef bno055_id_inf;
+ * BNO055_EULER_TypeDef  euler_angles;
+ *
+ * int main() {
+ *     pc.printf("Bosch Sensortec BNO055 test program on " __DATE__ "/" __TIME__ "\r\n");
+ *     if (imu.chip_ready() == 0){
+ *         pc.printf("Bosch BNO055 is NOT avirable!!\r\n");
+ *     }
+ *     imu.read_id_inf(&bno055_id_inf);
+ *     pc.printf("CHIP:0x%02x, ACC:0x%02x, MAG:0x%02x, GYR:0x%02x, , SW:0x%04x, , BL:0x%02x\r\n",
+ *                bno055_id_inf.chip_id, bno055_id_inf.acc_id, bno055_id_inf.mag_id,
+ *                bno055_id_inf.gyr_id, bno055_id_inf.sw_rev_id, bno055_id_inf.bootldr_rev_id);
+ *     while(1) {
+ *         imu.get_Euler_Angles(&euler_angles);
+ *         pc.printf("Heading:%+6.1f [deg], Roll:%+6.1f [deg], Pich:%+6.1f [deg]\r\n",
+ *                    euler_angles.h, euler_angles.r, euler_angles.p);
+ *         wait(0.5);
+ *     }
+ * }
+ * @endcode
+ */
+
+class BNO055
+{
+public:
+    /** Configure data pin
+      * @param data SDA and SCL pins
+      * @param device address
+      */
+    BNO055(PinName p_sda, PinName p_scl, PinName p_reset, uint8_t addr, uint8_t mode);
+ 
+    /** Configure data pin
+      * @param data SDA and SCL pins
+      * @param Other parameters are set default data
+      */
+    BNO055(PinName p_sda, PinName p_scl, PinName p_reset);
+ 
+    /** Configure data pin (with other devices on I2C line)
+      * @param I2C previous definition
+      * @param device address
+      */
+    BNO055(I2C& p_i2c, PinName p_reset, uint8_t addr, uint8_t mode);
+ 
+    /** Configure data pin (with other devices on I2C line)
+      * @param I2C previous definition
+      * @param Other parameters are set default data
+      */
+    BNO055(I2C& p_i2c, PinName p_reset);
+ 
+    /** Get Euler Angles
+     * @param double type of 3D data address
+     */
+    void get_Euler_Angles(BNO055_EULER_TypeDef *el);
+ 
+    /** Get Quaternion XYZ&W
+     * @param int16_t type of 4D data address
+     */
+    void get_quaternion(BNO055_QUATERNION_TypeDef *qua);
+ 
+    /** Get Linear accel data
+     * @param double type of 3D data address
+     */
+    void get_linear_accel(BNO055_LIN_ACC_TypeDef *la);
+ 
+    /** Get Gravity data
+     * @param double type of 3D data address
+     */
+    void get_gravity(BNO055_GRAVITY_TypeDef *gr);
+ 
+    /** Get Chip temperature data both Acc & Gyro
+     * @param int8_t type of data address
+     */
+    void get_chip_temperature(BNO055_TEMPERATURE_TypeDef *tmp);
+ 
+    /** Change fusion mode
+      * @param fusion mode
+      * @return none
+      */
+    void change_fusion_mode(uint8_t mode);
+ 
+    /** Set Mouting position
+      *  Please make sure your mounting direction of BNO055 chip
+      *  refrence: BNO055 data sheet BST-BNO055-DS000-12 3.4 Axis remap
+      * @param Set P0 to P7 mounting position data
+      * @return none
+      */
+    void set_mounting_position(uint8_t position);
+ 
+    /** Read BNO055 ID information
+      * @param ID information address
+      * @return none
+      */
+    void read_id_inf(BNO055_ID_INF_TypeDef *id);
+ 
+    /** Check chip is avairable or not
+      * @param none
+      * @return OK = 1, NG = 0;
+      */
+    uint8_t chip_ready(void);
+ 
+    /** Read calibration status
+      * @param none
+      * @return SYS(7:6),GYR(5:4),ACC(3:2),MAG(1:0) 3 = Calibrated, 0= not yet
+      */
+    uint8_t read_calib_status(void);
+ 
+    /** Reset
+      * @param none
+      * @return 0 = sucess, 1 = Not available chip
+      */
+    uint8_t reset(void);
+ 
+    /** Set I2C clock frequency
+      * @param freq.
+      * @return none
+      */
+    void frequency(int hz);
+ 
+    /** Read page 0 register
+      * @param register's address
+      * @return register data
+      */
+    uint8_t read_reg0(uint8_t addr);
+ 
+    /** Write page 0 register
+      * @param register's address
+      * @param data
+      * @return register data
+      */
+    uint8_t write_reg0(uint8_t addr, uint8_t data);
+ 
+    /** Read page 1 register
+      * @param register's address
+      * @return register data
+      */
+    uint8_t read_reg1(uint8_t addr);
+ 
+    /** Write page 1 register
+      * @param register's address
+      * @param data
+      * @return register data
+      */
+    uint8_t write_reg1(uint8_t addr, uint8_t data);
+ 
+protected:
+    void initialize(void);
+    void check_id(void);
+    void set_initial_dt_to_regs(void);
+    void unit_selection(void);
+    uint8_t check_operating_mode(void);
+    uint8_t select_page(uint8_t page);
+ 
+    I2C _i2c;
+    DigitalOut _res;
+ 
+private:
+    char     dt[10];      // working buffer
+    uint8_t  chip_addr;
+    uint8_t  chip_mode;
+    uint8_t  ready_flag;
+    uint8_t  page_flag;
+ 
+    uint8_t  chip_id;
+    uint8_t  acc_id;
+    uint8_t  mag_id;
+    uint8_t  gyr_id;
+    uint8_t  bootldr_rev_id;
+    uint16_t sw_rev_id;
+ 
+};
+
 //---------------------------------------------------------
 //----- Register's definition -----------------------------
 //---------------------------------------------------------
