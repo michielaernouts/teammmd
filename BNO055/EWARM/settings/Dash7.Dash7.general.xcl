@@ -2,7 +2,7 @@
 
 "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\bin\armstlink2.dll" 
 
-"C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\EWARM\Dash7\Exe\Dash7.out" 
+"C:\STM32Toolchain\teammmd\BNO055\EWARM\Dash7\Exe\Dash7.out" 
 
 --plugin "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\bin\armbat.dll" 
 
