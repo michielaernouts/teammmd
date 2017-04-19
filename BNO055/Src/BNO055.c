@@ -1,70 +1,8 @@
-/**
-  ******************************************************************************
-  * File Name          : BNO055
-  * Description        : BNO055 driver
-  ******************************************************************************
-  *
-  * COPYRIGHT(c) 2017 STMicroelectronics
-  *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  *
-  ******************************************************************************
-  */
-
-
-/* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32l1xx_hal.h"
 #include "BNO055.h"
 
-/* USER CODE BEGIN Includes */
-/* USER CODE BEGIN Includes */
-/*#ifdef __GNUC__
-/* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
-   set to 'Yes') calls __io_putchar() */
-/*      #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
-#else
-#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
-#endif  /* __GNUC__ */
-/* USER CODE END Includes */
-
-/* Private variables ---------------------------------------------------------*/
-
-
-/* USER CODE BEGIN PV */
-/* Private variables ---------------------------------------------------------*/
-
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
-
-
-/* USER CODE BEGIN PFP */
-/* Private function prototypes -----------------------------------------------*/
-
-/* USER CODE END PFP */
-
-/* USER CODE BEGIN 0 */
+/*
 BNO055::BNO055 (PinName p_sda, PinName p_scl, PinName p_reset) :
     _i2c(p_sda, p_scl), _res(p_reset)
 {
@@ -87,10 +25,10 @@ BNO055::BNO055 (I2C& p_i2c, PinName p_reset) :
     chip_addr = BNO055_G_CHIP_ADDR;
     chip_mode = MODE_NDOF;
     initialize ();
-}
+}*/
  
 /////////////// Read data & normalize /////////////////////
-void BNO055::get_Euler_Angles(BNO055_EULER_TypeDef *el)
+void BNO055_get_Euler_Angles(BNO055_EULER_TypeDef *el)
 {
     uint8_t deg_or_rad;
     int16_t h,p,r;
@@ -121,7 +59,7 @@ void BNO055::get_Euler_Angles(BNO055_EULER_TypeDef *el)
     }
 }
  
-void BNO055::get_quaternion(BNO055_QUATERNION_TypeDef *qua)
+void BNO055_get_quaternion(BNO055_QUATERNION_TypeDef *qua)
 {
     select_page(0);
     dt[0] = BNO055_QUATERNION_W_LSB;
@@ -133,7 +71,7 @@ void BNO055::get_quaternion(BNO055_QUATERNION_TypeDef *qua)
     qua->z = dt[7] << 8 | dt[6];
 }
  
-void BNO055::get_linear_accel(BNO055_LIN_ACC_TypeDef *la)
+void BNO055_get_linear_accel(BNO055_LIN_ACC_TypeDef *la)
 {
     uint8_t ms2_or_mg;
     int16_t x,y,z;
@@ -164,7 +102,7 @@ void BNO055::get_linear_accel(BNO055_LIN_ACC_TypeDef *la)
     }
 }
  
-void BNO055::get_gravity(BNO055_GRAVITY_TypeDef *gr)
+void BNO055_get_gravity(BNO055_GRAVITY_TypeDef *gr)
 {
     uint8_t ms2_or_mg;
     int16_t x,y,z;
@@ -195,7 +133,7 @@ void BNO055::get_gravity(BNO055_GRAVITY_TypeDef *gr)
     }
 }
  
-void BNO055::get_chip_temperature(BNO055_TEMPERATURE_TypeDef *tmp)
+void BNO055_get_chip_temperature(BNO055_TEMPERATURE_TypeDef *tmp)
 {
     uint8_t c_or_f;
  
@@ -235,7 +173,7 @@ void BNO055::get_chip_temperature(BNO055_TEMPERATURE_TypeDef *tmp)
 }
  
 /////////////// Initialize ////////////////////////////////
-void BNO055::initialize (void)
+void BNO055_initialize (void)
 {
 #if defined(TARGET_STM32L152RE)
     _i2c.frequency(100000);
@@ -254,7 +192,7 @@ void BNO055::initialize (void)
     change_fusion_mode(chip_mode);
 }
  
-void BNO055::unit_selection(void)
+void BNO055_unit_selection(void)
 {
     select_page(0);
     dt[0] = BNO055_UNIT_SEL;
@@ -262,7 +200,7 @@ void BNO055::unit_selection(void)
     _i2c.write(chip_addr, dt, 2, false);
 }
  
-uint8_t BNO055::select_page(uint8_t page)
+uint8_t BNO055_select_page(uint8_t page)
 {
     if (page != page_flag){
         dt[0] = BNO055_PAGE_ID;
@@ -280,7 +218,7 @@ uint8_t BNO055::select_page(uint8_t page)
     return page_flag;
 }
  
-uint8_t BNO055::reset(void)
+uint8_t BNO055_reset(void)
 {
      _res = 0;
      wait_ms(1);   // Reset 1mS
@@ -304,14 +242,14 @@ uint8_t BNO055::reset(void)
 }
  
 ////// Set initialize data to related registers ///////////
-void BNO055::set_initial_dt_to_regs(void)
+void BNO055_set_initial_dt_to_regs(void)
 {
     // select_page(0);
     // current setting is only used default values
 }
  
 /////////////// Check Who am I? ///////////////////////////
-void BNO055::check_id(void)
+void BNO055_check_id(void)
 {
     select_page(0);
     // ID
@@ -340,7 +278,7 @@ void BNO055::check_id(void)
     sw_rev_id = dt[6];
 }
  
-void BNO055::read_id_inf(BNO055_ID_INF_TypeDef *id)
+void BNO055_read_id_inf(BNO055_ID_INF_TypeDef *id)
 {
     id->chip_id = chip_id;
     id->acc_id = acc_id;
@@ -351,7 +289,7 @@ void BNO055::read_id_inf(BNO055_ID_INF_TypeDef *id)
 }
  
 /////////////// Check chip ready or not  //////////////////
-uint8_t BNO055::chip_ready(void)
+uint8_t BNO055_chip_ready(void)
 {
     if (ready_flag == 0x0f) {
         return 1;
@@ -360,7 +298,7 @@ uint8_t BNO055::chip_ready(void)
 }
  
 /////////////// Read Calibration status  //////////////////
-uint8_t BNO055::read_calib_status(void)
+uint8_t BNO055_read_calib_status(void)
 {
     select_page(0);
     dt[0] = BNO055_CALIB_STAT;
@@ -370,7 +308,7 @@ uint8_t BNO055::read_calib_status(void)
 }
  
 /////////////// Change Fusion mode  ///////////////////////
-void BNO055::change_fusion_mode(uint8_t mode)
+void BNO055_change_fusion_mode(uint8_t mode)
 {
     uint8_t current_mode;
  
@@ -404,7 +342,7 @@ void BNO055::change_fusion_mode(uint8_t mode)
     }
 }
  
-uint8_t BNO055::check_operating_mode(void)
+uint8_t BNO055_check_operating_mode(void)
 {
     select_page(0);
     dt[0] = BNO055_OPR_MODE;
@@ -414,7 +352,7 @@ uint8_t BNO055::check_operating_mode(void)
 }
  
 /////////////// Set Mouting position  /////////////////////
-void BNO055::set_mounting_position(uint8_t position)
+void BNO055_set_mounting_position(uint8_t position)
 {
     uint8_t remap_config;
     uint8_t remap_sign;
@@ -465,13 +403,13 @@ void BNO055::set_mounting_position(uint8_t position)
 }
  
 /////////////// I2C Freq. /////////////////////////////////
-void BNO055::frequency(int hz)
+void BNO055_frequency(int hz)
 {
     _i2c.frequency(hz);
 }
  
 /////////////// Read/Write specific register //////////////
-uint8_t BNO055::read_reg0(uint8_t addr)
+uint8_t BNO055_read_reg0(uint8_t addr)
 {
     select_page(0);
     dt[0] = addr;
@@ -480,7 +418,7 @@ uint8_t BNO055::read_reg0(uint8_t addr)
     return (uint8_t)dt[0];
 }
  
-uint8_t BNO055::write_reg0(uint8_t addr, uint8_t data)
+uint8_t BNO055_write_reg0(uint8_t addr, uint8_t data)
 {
     uint8_t current_mode;
     uint8_t d;
@@ -495,7 +433,7 @@ uint8_t BNO055::write_reg0(uint8_t addr, uint8_t data)
     return d;
 }
  
-uint8_t BNO055::read_reg1(uint8_t addr)
+uint8_t BNO055_read_reg1(uint8_t addr)
 {
     select_page(1);
     dt[0] = addr;
@@ -504,7 +442,7 @@ uint8_t BNO055::read_reg1(uint8_t addr)
     return (uint8_t)dt[0];
 }
  
-uint8_t BNO055::write_reg1(uint8_t addr, uint8_t data)
+uint8_t BNO055_write_reg1(uint8_t addr, uint8_t data)
 {
     uint8_t current_mode;
     uint8_t d;
