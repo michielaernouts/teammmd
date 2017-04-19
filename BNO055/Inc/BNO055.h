@@ -216,8 +216,8 @@ enum {MT_P0 = 0, MT_P1, MT_P2, MT_P3, MT_P4, MT_P5, MT_P6, MT_P7};
   uint8_t check_operating_mode(void);
   uint8_t select_page(uint8_t page);
 
-  I2C _i2c;
-  DigitalOut _res;
+  /*I2C _i2c;
+  DigitalOut _res;*/
 
   char     dt[10];      // working buffer
   uint8_t  chip_addr;
@@ -231,6 +231,12 @@ enum {MT_P0 = 0, MT_P1, MT_P2, MT_P3, MT_P4, MT_P5, MT_P6, MT_P7};
   uint8_t  gyr_id;
   uint8_t  bootldr_rev_id;
   uint16_t sw_rev_id;
+  
+  
+  I2C_HandleTypeDef *hi2cLib;
+  void setI2CInterface_BNO055(I2C_HandleTypeDef *hi2c);
+  uint8_t READ_REGISTER_BNO055(uint8_t buf[],uint8_t reg,uint8_t length);
+  uint8_t WRITE_REGISTER_BNO055(uint8_t pData[],uint8_t length);
 
 
 //---------------------------------------------------------
