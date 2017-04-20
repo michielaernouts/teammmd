@@ -1,7 +1,7 @@
 #include "stm32l1xx_hal.h"
 
-#ifndef __BNO055_H
-#define __BNO055_H
+#ifndef BNO055_H
+#define BNO055_H
 
 //  BNO055
 //  7bit address = 0b010100x(0x28 or 0x29 depends on COM3)
@@ -117,33 +117,33 @@ enum {MT_P0 = 0, MT_P1, MT_P2, MT_P3, MT_P4, MT_P5, MT_P6, MT_P7};
   /** Get Euler Angles
    * @param double type of 3D data address
    */
-  void get_Euler_Angles(BNO055_EULER_TypeDef *el);
+  void BNO055_get_Euler_Angles(BNO055_EULER_TypeDef *el);
 
   /** Get Quaternion XYZ&W
    * @param int16_t type of 4D data address
    */
-  void get_quaternion(BNO055_QUATERNION_TypeDef *qua);
+  void BNO055_get_quaternion(BNO055_QUATERNION_TypeDef *qua);
 
   /** Get Linear accel data
    * @param double type of 3D data address
    */
-  void get_linear_accel(BNO055_LIN_ACC_TypeDef *la);
+  void BNO055_get_linear_accel(BNO055_LIN_ACC_TypeDef *la);
 
   /** Get Gravity data
    * @param double type of 3D data address
    */
-  void get_gravity(BNO055_GRAVITY_TypeDef *gr);
+  void BNO055_get_gravity(BNO055_GRAVITY_TypeDef *gr);
 
   /** Get Chip temperature data both Acc & Gyro
    * @param int8_t type of data address
    */
-  void get_chip_temperature(BNO055_TEMPERATURE_TypeDef *tmp);
+  void BNO055_get_chip_temperature(BNO055_TEMPERATURE_TypeDef *tmp);
 
   /** Change fusion mode
     * @param fusion mode
     * @return none
     */
-  void change_fusion_mode(uint8_t mode);
+  void BNO055_change_fusion_mode(uint8_t mode);
 
   /** Set Mouting position
     *  Please make sure your mounting direction of BNO055 chip
@@ -151,89 +151,89 @@ enum {MT_P0 = 0, MT_P1, MT_P2, MT_P3, MT_P4, MT_P5, MT_P6, MT_P7};
     * @param Set P0 to P7 mounting position data
     * @return none
     */
-  void set_mounting_position(uint8_t position);
+  void BNO055_set_mounting_position(uint8_t position);
 
   /** Read BNO055 ID information
     * @param ID information address
     * @return none
     */
-  void read_id_inf(BNO055_ID_INF_TypeDef *id);
+  void BNO055_read_id_inf(BNO055_ID_INF_TypeDef *id);
 
   /** Check chip is avairable or not
     * @param none
     * @return OK = 1, NG = 0;
     */
-  uint8_t chip_ready(void);
+  uint8_t BNO055_chip_ready(void);
 
   /** Read calibration status
     * @param none
     * @return SYS(7:6),GYR(5:4),ACC(3:2),MAG(1:0) 3 = Calibrated, 0= not yet
     */
-  uint8_t read_calib_status(void);
+  uint8_t BNO055_read_calib_status(void);
 
   /** Reset
     * @param none
     * @return 0 = sucess, 1 = Not available chip
     */
-  uint8_t reset(void);
+  uint8_t BNO055_reset(void);
 
   /** Set I2C clock frequency
     * @param freq.
     * @return none
     */
-  void frequency(int hz);
+  void BNO055_frequency(int hz);
 
   /** Read page 0 register
     * @param register's address
     * @return register data
     */
-  uint8_t read_reg0(uint8_t addr);
+  uint8_t BNO055_read_reg0(uint8_t addr);
 
   /** Write page 0 register
     * @param register's address
     * @param data
     * @return register data
     */
-  uint8_t write_reg0(uint8_t addr, uint8_t data);
+  uint8_t BNO055_write_reg0(uint8_t addr, uint8_t data);
 
   /** Read page 1 register
     * @param register's address
     * @return register data
     */
-  uint8_t read_reg1(uint8_t addr);
+  uint8_t BNO055_read_reg1(uint8_t addr);
 
   /** Write page 1 register
     * @param register's address
     * @param data
     * @return register data
     */
-  uint8_t write_reg1(uint8_t addr, uint8_t data);
+  uint8_t BNO055_write_reg1(uint8_t addr, uint8_t data);
 
-  void initialize(void);
-  void check_id(void);
-  void set_initial_dt_to_regs(void);
-  void unit_selection(void);
-  uint8_t check_operating_mode(void);
-  uint8_t select_page(uint8_t page);
+  void BNO055_initialize(void);
+  void BNO055_check_id(void);
+  void BNO055_set_initial_dt_to_regs(void);
+  void BNO055_unit_selection(void);
+  uint8_t BNO055_check_operating_mode(void);
+  uint8_t BNO055_select_page(uint8_t page);
 
   /*I2C _i2c;
   DigitalOut _res;*/
 
-  char     dt[10];      // working buffer
-  uint8_t  chip_addr;
-  uint8_t  chip_mode;
-  uint8_t  ready_flag;
-  uint8_t  page_flag;
+  static char     dt[10];      // working buffer
+  static uint8_t  chip_addr;
+  static uint8_t  chip_mode;
+  static uint8_t  ready_flag;
+  static uint8_t  page_flag;
 
-  uint8_t  chip_id;
-  uint8_t  acc_id;
-  uint8_t  mag_id;
-  uint8_t  gyr_id;
-  uint8_t  bootldr_rev_id;
-  uint16_t sw_rev_id;
+  static uint8_t  chip_id;
+  static uint8_t  acc_id;
+  static uint8_t  mag_id;
+  static uint8_t  gyr_id;
+  static uint8_t  bootldr_rev_id;
+  static uint16_t sw_rev_id;
   
   
-  I2C_HandleTypeDef *hi2cLib;
+  static I2C_HandleTypeDef *hi2cLib;
   void setI2CInterface_BNO055(I2C_HandleTypeDef *hi2c);
   uint8_t READ_REGISTER_BNO055(uint8_t buf[],uint8_t reg,uint8_t length);
   uint8_t WRITE_REGISTER_BNO055(uint8_t pData[],uint8_t length);
@@ -419,4 +419,4 @@ enum {MT_P0 = 0, MT_P1, MT_P2, MT_P3, MT_P4, MT_P5, MT_P6, MT_P7};
 #define GYRO_ANY_MOTION_SET     0x1f
 
   
- #endif
+#endif

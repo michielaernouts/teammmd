@@ -128,11 +128,11 @@
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 71 83 24 76 86 57 31 37 33 23 49 46 55 27 63 43 66 73 59 106 29 21 48 54 22 61 91 25 88 36 47 52 39 104 85 87</file>
+                    <file> 71 85 83 24 76 86 57 31 37 33 23 49 46 55 27 63 43 66 73 59 106 29 21 48 54 22 61 91 25 88 36 47 52 39 104 87</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 61 31 52 66 76 25 23 85 24 54 91 47 104 59 86 83 87 71 106 63 49 43 21 88 48 57 29 37 33 73 46 27 22 36 39</file>
+                    <file> 83 36 37 29 33 39 87 71 86 73 22 85 24 48 57 23 46 27 43 49 76 54 61 91 25 47 52 104 106 31 59 63 66 21 88</file>
                 </tool>
             </inputs>
         </file>
@@ -563,10 +563,6 @@
             <name>$PROJ_DIR$\..\Src\main.c</name>
             <outputs>
                 <tool>
-                    <name>ICCARM</name>
-                    <file> 103</file>
-                </tool>
-                <tool>
                     <name>BICOMP</name>
                     <file> 100</file>
                 </tool>
@@ -574,11 +570,11 @@
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 71 83 24 76 86 57 31 37 33 23 49 46 55 27 63 43 66 73 59 106 29 21 48 54 22 61 91 25 88 36 47 52 39 104</file>
+                    <file> 71 83 24 76 86 57 31 37 33 23 49 46 55 27 63 43 66 73 59 106 29 21 48 54 22 61 91 25 88 36 47 52 39 104 85</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 86 71 59 31 66 23 83 24 76 54 61 91 25 47 52 104 106 63 49 43 21 88 48 57 29 37 33 73 46 27 22 36 39</file>
+                    <file> 54 29 83 33 39 47 24 91 104 37 36 85 76 61 25 52 73 86 22 71 48 57 23 46 27 43 49 106 31 59 63 66 21 88</file>
                 </tool>
             </inputs>
         </file>
@@ -593,7 +589,7 @@
             <inputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 30 103 77 67 89 68 60 82 90 62 44 45 93 92 95 26 34 35 70 94 102 78 58 79 74</file>
+                    <file> 30 51 103 77 67 89 68 60 82 90 62 44 45 93 92 95 26 34 35 70 94 102 78 58 79 74</file>
                 </tool>
             </inputs>
         </file>
@@ -602,13 +598,9 @@
             <outputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 38 72</file>
+                    <file> 72 38</file>
                 </tool>
             </outputs>
         </file>
-        <forcedrebuild>
-            <name>[MULTI_TOOL]</name>
-            <tool>ILINK</tool>
-        </forcedrebuild>
     </configuration>
 </project>

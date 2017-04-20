@@ -35,6 +35,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32l1xx_hal.h"
+#include "BNO055.h"
 
 /* USER CODE BEGIN Includes */
 /* USER CODE BEGIN Includes */
@@ -49,9 +50,11 @@
 
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
-
+BNO055_EULER_TypeDef  euler_angles;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
+//buffer for BNO055
+char dt[10];
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
@@ -96,7 +99,7 @@ int main(void)
   MX_I2C1_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
-
+  
   /* USER CODE BEGIN 2 */
     uint8_t opt = 0;
     char readBuf[1];
@@ -109,11 +112,15 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-      if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_RESET) {
+      /*if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_RESET) {
 	          HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
                   Dash7Send();
 	          HAL_Delay(500);
-      }
+      }*/
+      BNO055_get_Euler_Angles(&euler_angles);
+      printf("Heading:%+6.1f [deg], Roll:%+6.1f [deg], Pitch:%+6.1f [deg]\r\n", euler_angles.h, euler_angles.r, euler_angles.p);
+    
+    
     
   }
   /* USER CODE END 3 */

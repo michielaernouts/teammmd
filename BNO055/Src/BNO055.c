@@ -2,13 +2,15 @@
 #include "BNO055.h"
 #include <stdbool.h>
 
+
+
 /*
 BNO055::BNO055 (PinName p_sda, PinName p_scl, PinName p_reset) :
     _i2c(p_sda, p_scl), _res(p_reset)
 {
     chip_addr = BNO055_G_CHIP_ADDR;
     chip_mode = MODE_NDOF;
-    initialize ();
+    BNO055_initialize ();
 }
  
 BNO055::BNO055 (I2C& p_i2c, PinName p_reset, uint8_t addr, uint8_t mode) :
@@ -16,7 +18,7 @@ BNO055::BNO055 (I2C& p_i2c, PinName p_reset, uint8_t addr, uint8_t mode) :
 {
     chip_addr = addr;
     chip_mode = mode;
-    initialize ();
+    BNO055_initialize ();
 }
  
 BNO055::BNO055 (I2C& p_i2c, PinName p_reset) :
@@ -24,7 +26,7 @@ BNO055::BNO055 (I2C& p_i2c, PinName p_reset) :
 {
     chip_addr = BNO055_G_CHIP_ADDR;
     chip_mode = MODE_NDOF;
-    initialize ();
+    BNO055_initialize ();
 }*/
 
 
@@ -49,7 +51,7 @@ void BNO055_get_Euler_Angles(BNO055_EULER_TypeDef *el)
     uint8_t deg_or_rad;
     int16_t h,p,r;
  
-    select_page(0);
+    BNO055_select_page(0);
     dt[0] = BNO055_UNIT_SEL;
     
     READ_REGISTER_BNO055(dt,BNO055_UNIT_SEL,1);
@@ -79,7 +81,7 @@ void BNO055_get_Euler_Angles(BNO055_EULER_TypeDef *el)
  
 void BNO055_get_quaternion(BNO055_QUATERNION_TypeDef *qua)
 {
-    select_page(0);
+    BNO055_select_page(0);
     dt[0] = BNO055_QUATERNION_W_LSB;
     READ_REGISTER_BNO055(dt,BNO055_QUATERNION_W_LSB,8);
     
@@ -94,7 +96,7 @@ void BNO055_get_linear_accel(BNO055_LIN_ACC_TypeDef *la)
     uint8_t ms2_or_mg;
     int16_t x,y,z;
  
-    select_page(0);
+    BNO055_select_page(0);
     dt[0] = BNO055_UNIT_SEL;
     READ_REGISTER_BNO055(dt,BNO055_UNIT_SEL,1);
     
@@ -126,7 +128,7 @@ void BNO055_get_gravity(BNO055_GRAVITY_TypeDef *gr)
     uint8_t ms2_or_mg;
     int16_t x,y,z;
  
-    select_page(0);
+    BNO055_select_page(0);
     dt[0] = BNO055_UNIT_SEL;
     READ_REGISTER_BNO055(dt,BNO055_UNIT_SEL,1);
     if (dt[0] & 0x01) {
@@ -155,7 +157,7 @@ void BNO055_get_chip_temperature(BNO055_TEMPERATURE_TypeDef *tmp)
 {
     uint8_t c_or_f;
  
-    select_page(0);
+    BNO055_select_page(0);
     dt[0] = BNO055_UNIT_SEL;
     READ_REGISTER_BNO055(dt,BNO055_UNIT_SEL,1);
     if (dt[0] & 0x10) {
@@ -168,7 +170,7 @@ void BNO055_get_chip_temperature(BNO055_TEMPERATURE_TypeDef *tmp)
 
     WRITE_REGISTER_BNO055(dt,2);
     
-    wait_ms(1); // Do I need to wait?
+    HAL_Delay(1); // Do I need to wait?
     dt[0] = BNO055_TEMP;
     READ_REGISTER_BNO055(dt,BNO055_TEMP,1);
     if (c_or_f) {
@@ -179,7 +181,7 @@ void BNO055_get_chip_temperature(BNO055_TEMPERATURE_TypeDef *tmp)
     dt[0] = BNO055_TEMP_SOURCE;
     dt[1] = 1;
     WRITE_REGISTER_BNO055(dt,2);
-    wait_ms(1); // Do I need to wait?
+    HAL_Delay(1); // Do I need to wait?
     dt[0] = BNO055_TEMP;
     READ_REGISTER_BNO055(dt,BNO055_TEMP,1);
     if (c_or_f) {
@@ -189,25 +191,25 @@ void BNO055_get_chip_temperature(BNO055_TEMPERATURE_TypeDef *tmp)
     }
 }
  
-/////////////// Initialize ////////////////////////////////
+/////////////// BNO055_initialize ////////////////////////////////
 void BNO055_initialize (void)
 {
 
     page_flag = 0xff;
-    select_page(0);
+    BNO055_select_page(0);
     // Check Acc & Mag & Gyro are available of not
-    check_id();
+    BNO055_check_id();
     // Set initial data
-    set_initial_dt_to_regs();
+    BNO055_set_initial_dt_to_regs();
     // Unit selection
-    unit_selection();
+    BNO055_unit_selection();
     // Set fusion mode
-    change_fusion_mode(chip_mode);
+    BNO055_change_fusion_mode(chip_mode);
 }
  
 void BNO055_unit_selection(void)
 {
-    select_page(0);
+    BNO055_select_page(0);
     dt[0] = BNO055_UNIT_SEL;
     dt[1] = UNIT_ORI_WIN + UNIT_ACC_MSS + UNIT_GYR_DPS + UNIT_EULER_DEG + UNIT_TEMP_C;
     WRITE_REGISTER_BNO055(dt,2);
@@ -233,32 +235,32 @@ uint8_t BNO055_select_page(uint8_t page)
 uint8_t BNO055_reset(void)
 {
      /*_res = 0;
-     wait_ms(1);   // Reset 1mS
+     HAL_Delay(1);   // Reset 1mS
      _res = 1;
      wait(0.7);  // Need to wait at least 650mS*/
      
     page_flag = 0xff;
-    select_page(0);
-    check_id();
+    BNO055_select_page(0);
+    BNO055_check_id();
     if (chip_id != I_AM_BNO055_CHIP){
         return 1;
     } else {
-        initialize();
+        BNO055_initialize();
         return 0;
     }
 }
  
-////// Set initialize data to related registers ///////////
+////// Set BNO055_initialize data to related registers ///////////
 void BNO055_set_initial_dt_to_regs(void)
 {
-    // select_page(0);
+    // BNO055_select_page(0);
     // current setting is only used default values
 }
  
 /////////////// Check Who am I? ///////////////////////////
 void BNO055_check_id(void)
 {
-    select_page(0);
+    BNO055_select_page(0);
     // ID
     dt[0] = BNO055_CHIP_ID;
     READ_REGISTER_BNO055(dt,BNO055_CHIP_ID,7);
@@ -306,7 +308,7 @@ uint8_t BNO055_chip_ready(void)
 /////////////// Read Calibration status  //////////////////
 uint8_t BNO055_read_calib_status(void)
 {
-    select_page(0);
+    BNO055_select_page(0);
     dt[0] = BNO055_CALIB_STAT;
     READ_REGISTER_BNO055(dt,BNO055_CALIB_STAT,1);
     return dt[0];
@@ -317,14 +319,14 @@ void BNO055_change_fusion_mode(uint8_t mode)
 {
     uint8_t current_mode;
  
-    select_page(0);
-    current_mode = check_operating_mode();
+    BNO055_select_page(0);
+    current_mode = BNO055_check_operating_mode();
     switch (mode) {
         case CONFIGMODE:
             dt[0] = BNO055_OPR_MODE;
             dt[1] = mode;
             WRITE_REGISTER_BNO055(dt,2);
-            wait_ms(19);    // wait 19mS
+            HAL_Delay(19);    // wait 19mS
             break;
         case MODE_IMU:
         case MODE_COMPASS:
@@ -335,12 +337,12 @@ void BNO055_change_fusion_mode(uint8_t mode)
                 dt[0] = BNO055_OPR_MODE;
                 dt[1] = CONFIGMODE;
                 WRITE_REGISTER_BNO055(dt,2);
-                wait_ms(19);    // wait 19mS
+                HAL_Delay(19);    // wait 19mS
             }
             dt[0] = BNO055_OPR_MODE;
             dt[1] = mode;
             WRITE_REGISTER_BNO055(dt,2);
-            wait_ms(7);    // wait 7mS
+            HAL_Delay(7);    // wait 7mS
             break;
         default:
             break;
@@ -349,7 +351,7 @@ void BNO055_change_fusion_mode(uint8_t mode)
  
 uint8_t BNO055_check_operating_mode(void)
 {
-    select_page(0);
+    BNO055_select_page(0);
     dt[0] = BNO055_OPR_MODE;
     READ_REGISTER_BNO055(dt,BNO055_OPR_MODE,1);
     return dt[0];
@@ -362,8 +364,8 @@ void BNO055_set_mounting_position(uint8_t position)
     uint8_t remap_sign;
     uint8_t current_mode;
  
-    current_mode = check_operating_mode();
-    change_fusion_mode(CONFIGMODE);
+    current_mode = BNO055_check_operating_mode();
+    BNO055_change_fusion_mode(CONFIGMODE);
     switch (position) {
         case MT_P0:
             remap_config = 0x21;
@@ -403,7 +405,7 @@ void BNO055_set_mounting_position(uint8_t position)
     dt[1] = remap_config;
     dt[2] = remap_sign;
     WRITE_REGISTER_BNO055(dt,3);
-    change_fusion_mode(current_mode);
+    BNO055_change_fusion_mode(current_mode);
 }
  
 /////////////// I2C Freq. /////////////////////////////////
@@ -415,7 +417,7 @@ void BNO055_set_mounting_position(uint8_t position)
 /////////////// Read/Write specific register //////////////
 uint8_t BNO055_read_reg0(uint8_t addr)
 {
-    select_page(0);
+    BNO055_select_page(0);
     dt[0] = addr;
 
     READ_REGISTER_BNO055(dt,addr,1);
@@ -427,19 +429,19 @@ uint8_t BNO055_write_reg0(uint8_t addr, uint8_t data)
     uint8_t current_mode;
     uint8_t d;
  
-    current_mode = check_operating_mode();
-    change_fusion_mode(CONFIGMODE);
+    current_mode = BNO055_check_operating_mode();
+    BNO055_change_fusion_mode(CONFIGMODE);
     dt[0] = addr;
     dt[1] = data;
     WRITE_REGISTER_BNO055(dt,2);
     d = dt[0];
-    change_fusion_mode(current_mode);
+    BNO055_change_fusion_mode(current_mode);
     return d;
 }
  
 uint8_t BNO055_read_reg1(uint8_t addr)
 {
-    select_page(1);
+    BNO055_select_page(1);
     dt[0] = addr;
     READ_REGISTER_BNO055(dt,addr,1);
     return (uint8_t)dt[0];
@@ -450,14 +452,14 @@ uint8_t BNO055_write_reg1(uint8_t addr, uint8_t data)
     uint8_t current_mode;
     uint8_t d;
  
-    current_mode = check_operating_mode();
-    change_fusion_mode(CONFIGMODE);
-    select_page(1);
+    current_mode = BNO055_check_operating_mode();
+    BNO055_change_fusion_mode(CONFIGMODE);
+    BNO055_select_page(1);
     dt[0] = addr;
     dt[1] = data;
     WRITE_REGISTER_BNO055(dt,2);
     d = dt[0];
-    change_fusion_mode(current_mode);
+    BNO055_change_fusion_mode(current_mode);
     return d;
 }
  
