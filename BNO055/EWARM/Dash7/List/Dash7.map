@@ -1,13 +1,13 @@
 ###############################################################################
 #
-# IAR ELF Linker V8.10.1.12857/W32 for ARM                19/Apr/2017  11:26:50
+# IAR ELF Linker V8.10.1.12857/W32 for ARM                20/Apr/2017  14:44:54
 # Copyright 2007-2017 IAR Systems AB.
 #
 #    Output file  =  C:\STM32Toolchain\teammmd\BNO055\EWARM\Dash7\Exe\Dash7.out
 #    Map file     =  
 #        C:\STM32Toolchain\teammmd\BNO055\EWARM\Dash7\List\Dash7.map
 #    Command line =  
-#        -f C:\Users\Mats\AppData\Local\Temp\EW62E0.tmp
+#        -f C:\Users\Mats\AppData\Local\Temp\EW3788.tmp
 #        (C:\STM32Toolchain\teammmd\BNO055\EWARM\Dash7\Obj\BNO055.o
 #        C:\STM32Toolchain\teammmd\BNO055\EWARM\Dash7\Obj\main.o
 #        C:\STM32Toolchain\teammmd\BNO055\EWARM\Dash7\Obj\startup_stm32l152xe.o
@@ -83,21 +83,21 @@ initialize by copy { rw };
   .text              ro code  0x08001130    0x16  stm32l1xx_hal.o [1]
   .text              ro code  0x08001148   0x128  stm32l1xx_hal_i2c.o [1]
   .text              ro code  0x08001270    0x18  stm32l1xx_hal.o [1]
-  .text              ro code  0x08001288    0x86  ABImemcpy.o [4]
+  .text              ro code  0x08001288    0x86  ABImemcpy.o [5]
   .text              ro code  0x08001310    0x64  system_stm32l1xx.o [1]
-  .text              ro code  0x08001374    0x40  zero_init3.o [4]
-  .text              ro code  0x080013b4    0x2c  copy_init3.o [4]
-  .text              ro code  0x080013e0    0x28  data_init.o [4]
+  .text              ro code  0x08001374    0x40  zero_init3.o [5]
+  .text              ro code  0x080013b4    0x2c  copy_init3.o [5]
+  .text              ro code  0x080013e0    0x28  data_init.o [5]
   .iar.init_table    const    0x08001408    0x24  - Linker created -
-  .text              ro code  0x0800142c    0x1a  cmain.o [4]
+  .text              ro code  0x0800142c    0x1a  cmain.o [5]
   .text              ro code  0x08001446     0x4  low_level_init.o [3]
   .text              ro code  0x0800144a     0x4  exit.o [3]
-  .text              ro code  0x08001450     0xa  cexit.o [4]
-  .text              ro code  0x0800145c    0x14  exit.o [5]
+  .text              ro code  0x08001450     0xa  cexit.o [5]
+  .text              ro code  0x0800145c    0x14  exit.o [6]
   .text              ro code  0x08001470    0x10  startup_stm32l152xe.o [1]
   .text              ro code  0x08001480    0x10  stm32l1xx_hal.o [1]
   .text              ro code  0x08001490     0xe  stm32l1xx_it.o [1]
-  .text              ro code  0x0800149e     0xc  cstartup_M.o [4]
+  .text              ro code  0x0800149e     0xc  cstartup_M.o [5]
   .rodata            const    0x080014ac     0x8  system_stm32l1xx.o [1]
   .text              ro code  0x080014b4     0x4  startup_stm32l152xe.o [1]
   .text              ro code  0x080014b8     0x4  startup_stm32l152xe.o [1]
@@ -163,8 +163,8 @@ initialize by copy { rw };
   .text              ro code  0x080015a8     0x4  startup_stm32l152xe.o [1]
   .text              ro code  0x080015ac     0x4  startup_stm32l152xe.o [1]
   Initializer bytes  const    0x080015b0     0x4  <for P2-1>
-  .rodata            const    0x080015b4     0x0  zero_init3.o [4]
-  .rodata            const    0x080015b4     0x0  copy_init3.o [4]
+  .rodata            const    0x080015b4     0x0  zero_init3.o [5]
+  .rodata            const    0x080015b4     0x0  copy_init3.o [5]
                             - 0x080015b4  0x1490
 
 "P2", part 1 of 3:                           0x4
@@ -235,7 +235,11 @@ dl7M_tlf.a: [3]
     -------------------------------------------------
     Total:                        8
 
-rt7M_tl.a: [4]
+m7M_tl.a: [4]
+    -------------------------------------------------
+    Total:
+
+rt7M_tl.a: [5]
     ABImemcpy.o                 134
     cexit.o                      10
     cmain.o                      26
@@ -246,7 +250,7 @@ rt7M_tl.a: [4]
     -------------------------------------------------
     Total:                      330
 
-shb_l.a: [5]
+shb_l.a: [6]
     exit.o                       20
     -------------------------------------------------
     Total:                       20
@@ -265,7 +269,7 @@ Entry                      Address   Size  Type      Object
 -----                      -------   ----  ----      ------
 .iar.init_table$$Base   0x08001408          --   Gb  - Linker created -
 .iar.init_table$$Limit  0x0800142c          --   Gb  - Linker created -
-?main                   0x0800142d         Code  Gb  cmain.o [4]
+?main                   0x0800142d         Code  Gb  cmain.o [5]
 AHBPrescTable           0x08001364   0x10  Data  Gb  system_stm32l1xx.o [1]
 APBPrescTable           0x080014ac    0x8  Data  Gb  system_stm32l1xx.o [1]
 CSTACK$$Base            0x20000008          --   Gb  - Linker created -
@@ -315,21 +319,21 @@ SystemInit              0x08001311   0x38  Code  Gb  system_stm32l1xx.o [1]
 UART_SetConfig          0x08000a7f  0x130  Code  Lc  stm32l1xx_hal_uart.o [1]
 UART_WaitOnFlagUntilTimeout
                         0x080009eb   0x94  Code  Lc  stm32l1xx_hal_uart.o [1]
-__aeabi_memcpy4         0x08001289         Code  Gb  ABImemcpy.o [4]
-__aeabi_memcpy8         0x08001289         Code  Gb  ABImemcpy.o [4]
-__cmain                 0x0800142d         Code  Gb  cmain.o [4]
-__exit                  0x0800145d   0x14  Code  Gb  exit.o [5]
-__iar_copy_init3        0x080013b5   0x2c  Code  Gb  copy_init3.o [4]
-__iar_data_init3        0x080013e1   0x28  Code  Gb  data_init.o [4]
-__iar_program_start     0x0800149f         Code  Gb  cstartup_M.o [4]
+__aeabi_memcpy4         0x08001289         Code  Gb  ABImemcpy.o [5]
+__aeabi_memcpy8         0x08001289         Code  Gb  ABImemcpy.o [5]
+__cmain                 0x0800142d         Code  Gb  cmain.o [5]
+__exit                  0x0800145d   0x14  Code  Gb  exit.o [6]
+__iar_copy_init3        0x080013b5   0x2c  Code  Gb  copy_init3.o [5]
+__iar_data_init3        0x080013e1   0x28  Code  Gb  data_init.o [5]
+__iar_program_start     0x0800149f         Code  Gb  cstartup_M.o [5]
 __iar_systems$$module {Abs}
                         0x00000001         Data  Gb  command line/config [2]
-__iar_zero_init3        0x08001375   0x40  Code  Gb  zero_init3.o [4]
+__iar_zero_init3        0x08001375   0x40  Code  Gb  zero_init3.o [5]
 __low_level_init        0x08001447    0x4  Code  Gb  low_level_init.o [3]
 __vector_table          0x08000000         Data  Gb  startup_stm32l152xe.o [1]
-_call_main              0x08001439         Code  Gb  cmain.o [4]
-_exit                   0x08001451         Code  Gb  cexit.o [4]
-_main                   0x08001443         Code  Gb  cmain.o [4]
+_call_main              0x08001439         Code  Gb  cmain.o [5]
+_exit                   0x08001451         Code  Gb  cexit.o [5]
+_main                   0x08001443         Code  Gb  cmain.o [5]
 exit                    0x0800144b    0x4  Code  Gb  exit.o [3]
 hi2c1                   0x20000408   0x54  Data  Gb  main.o [1]
 huart1                  0x2000045c   0x40  Data  Gb  main.o [1]
@@ -341,8 +345,9 @@ uwTick                  0x200004dc    0x4  Data  Gb  stm32l1xx_hal.o [1]
 [1] = C:\STM32Toolchain\teammmd\BNO055\EWARM\Dash7\Obj
 [2] = command line
 [3] = dl7M_tlf.a
-[4] = rt7M_tl.a
-[5] = shb_l.a
+[4] = m7M_tl.a
+[5] = rt7M_tl.a
+[6] = shb_l.a
 
   5 506 bytes of readonly  code memory
      50 bytes of readonly  data memory
