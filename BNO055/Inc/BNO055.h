@@ -5,8 +5,8 @@
 
 //  BNO055
 //  7bit address = 0b010100x(0x28 or 0x29 depends on COM3)
-#define BNO055_G_CHIP_ADDR      (0x28 << 1) // COM3 = GND
-#define BNO055_V_CHIP_ADDR      (0x29 << 1) // COM3 = Vdd
+#define BNO055_G_CHIP_ADDR      (0x28) // COM3 = GND
+#define BNO055_V_CHIP_ADDR      (0x29) // COM3 = Vdd
  
 // Fusion mode
 #define CONFIGMODE              0x00

@@ -51,10 +51,13 @@
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
 BNO055_EULER_TypeDef  euler_angles;
+BNO055_TEMPERATURE_TypeDef temperature;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
-//buffer for BNO055
-char dt[10];
+
+uint8_t MPL3115A2_Initialized = 0;
+
+
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
@@ -99,10 +102,17 @@ int main(void)
   MX_I2C1_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
+  setI2CInterface_BNO055(&hi2c1);
+  BNO055_initialize();
   
   /* USER CODE BEGIN 2 */
     uint8_t opt = 0;
     char readBuf[1];
+    
+    //set operation mode to NDOF (reg 3D to 00001100)
+    //char operationModeData[2] = {0x3D, 00001100};
+    //WRITE_REGISTER_BNO055(operationModeData,2);
+    
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -117,15 +127,18 @@ int main(void)
                   Dash7Send();
 	          HAL_Delay(500);
       }*/
+      
       BNO055_get_Euler_Angles(&euler_angles);
       printf("Heading:%+6.1f [deg], Roll:%+6.1f [deg], Pitch:%+6.1f [deg]\r\n", euler_angles.h, euler_angles.r, euler_angles.p);
     
-    
+      HAL_Delay(30);
+
     
   }
   /* USER CODE END 3 */
 
 }
+
 
 
 /*  
@@ -260,15 +273,29 @@ void SystemClock_Config(void)
 static void MX_I2C1_Init(void)
 {
 
-  hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 100000;
-  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c1.Init.OwnAddress1 = 0;
-  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c1.Init.OwnAddress2 = 0;
-  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+          GPIO_InitTypeDef GPIO_InitStruct;
+
+	  /* Peripheral clock enable */
+	  __HAL_RCC_I2C1_CLK_ENABLE();
+
+	  hi2c1.Instance = I2C1;
+	  hi2c1.Init.ClockSpeed = 100000;
+	  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
+	  hi2c1.Init.OwnAddress1 = 0;
+	  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+	  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+	  hi2c1.Init.OwnAddress2 = 0;
+	  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+	  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+	  //HAL_I2C_Init(&hi2c1);
+
+	  GPIO_InitStruct.Pin =GPIO_PIN_6|GPIO_PIN_7;
+	  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+	  GPIO_InitStruct.Pull = GPIO_PULLUP;
+	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+	  GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
+	  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
   if (HAL_I2C_Init(&hi2c1) != HAL_OK)
   {
     Error_Handler();

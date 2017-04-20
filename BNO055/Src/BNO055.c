@@ -34,12 +34,12 @@ void setI2CInterface_BNO055(I2C_HandleTypeDef *hi2c)
 {
 	hi2cLib=hi2c;
 }
-uint8_t WRITE_REGISTER_BNO055(uint8_t pData[],uint8_t length)
+uint8_t WRITE_REGISTER_BNO055(uint8_t pData[], uint8_t length)
 {
-	uint8_t status=HAL_I2C_Master_Transmit(hi2cLib, BNO055_G_CHIP_ADDR<<1, pData,length, HAL_MAX_DELAY);
+	uint8_t status=HAL_I2C_Master_Transmit(hi2cLib, BNO055_G_CHIP_ADDR<<1, pData, length, HAL_MAX_DELAY);
 	return status;
 }
-uint8_t READ_REGISTER_BNO055(uint8_t buf[],uint8_t reg,uint8_t length)
+uint8_t READ_REGISTER_BNO055(uint8_t buf[], uint8_t reg, uint8_t length)
 {
 	uint8_t status = HAL_I2C_Mem_Read(hi2cLib, BNO055_G_CHIP_ADDR<<1, reg, I2C_MEMADD_SIZE_8BIT, buf, length, HAL_MAX_DELAY);
 	return status;
@@ -194,7 +194,9 @@ void BNO055_get_chip_temperature(BNO055_TEMPERATURE_TypeDef *tmp)
 /////////////// BNO055_initialize ////////////////////////////////
 void BNO055_initialize (void)
 {
-
+    //chip_addr = BNO055_G_CHIP_ADDR;
+    //chip_mode = MODE_NDOF;
+  
     page_flag = 0xff;
     BNO055_select_page(0);
     // Check Acc & Mag & Gyro are available of not
@@ -204,7 +206,9 @@ void BNO055_initialize (void)
     // Unit selection
     BNO055_unit_selection();
     // Set fusion mode
-    BNO055_change_fusion_mode(chip_mode);
+    //BNO055_change_fusion_mode(chip_mode);
+    BNO055_change_fusion_mode(MODE_NDOF);
+
 }
  
 void BNO055_unit_selection(void)

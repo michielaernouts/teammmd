@@ -132,7 +132,7 @@
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 83 36 37 29 33 39 87 71 86 73 22 85 24 48 57 23 46 27 43 49 76 54 61 91 25 47 52 104 106 31 59 63 66 21 88</file>
+                    <file> 36 37 24 29 83 33 39 87 71 86 73 22 85 48 57 23 46 27 43 49 76 54 61 91 25 47 52 104 106 31 59 63 66 21 88</file>
                 </tool>
             </inputs>
         </file>
@@ -563,6 +563,10 @@
             <name>$PROJ_DIR$\..\Src\main.c</name>
             <outputs>
                 <tool>
+                    <name>ICCARM</name>
+                    <file> 103</file>
+                </tool>
+                <tool>
                     <name>BICOMP</name>
                     <file> 100</file>
                 </tool>
@@ -574,7 +578,7 @@
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 54 29 83 33 39 47 24 91 104 37 36 85 76 61 25 52 73 86 22 71 48 57 23 46 27 43 49 106 31 59 63 66 21 88</file>
+                    <file> 47 29 83 33 39 54 24 91 104 37 36 85 76 61 25 52 73 86 22 71 48 57 23 46 27 43 49 106 31 59 63 66 21 88</file>
                 </tool>
             </inputs>
         </file>
