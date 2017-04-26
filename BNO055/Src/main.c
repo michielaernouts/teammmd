@@ -110,6 +110,10 @@ int main(void)
     char readBuf[1];
     uint8_t calibData;
     
+    //Calibrate BNO055
+    BNO055_change_fusion_mode(CONFIGMODE);
+    
+    
     //set operation mode to NDOF (reg 3D to 00001100)
     //char operationModeData[2] = {0x3D, 00001100};
     //WRITE_REGISTER_BNO055(operationModeData,2);
@@ -128,16 +132,16 @@ int main(void)
                   Dash7Send();
 	          HAL_Delay(500);
       }*/
-    
+    if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_RESET) {
+      HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+      BNO055_change_fusion_mode(MODE_NDOF);
+    }
       calibData =  BNO055_read_calib_status();
-      
-      
       BNO055_get_Euler_Angles(&euler_angles);
       printf("Heading:%+6.1f [deg], Roll:%+6.1f [deg], Pitch:%+6.1f [deg]\r\n", euler_angles.h, euler_angles.r, euler_angles.p);
       printf("Calibration byte: %d \r\n", calibData);
       
       HAL_Delay(30);
-
     
   }
   /* USER CODE END 3 */

@@ -9,7 +9,7 @@
         <stlinkfoundProbes />
     </StLinkDriver>
     <DebugChecksum>
-        <Checksum>2180145246</Checksum>
+        <Checksum>491227808</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>
@@ -50,6 +50,9 @@
         <ITMportsLogFile>0</ITMportsLogFile>
         <ITMlogFile>$PROJ_DIR$\ITM.log</ITMlogFile>
     </SWOTraceHWSettings>
+    <Disassembly>
+        <MixedMode>1</MixedMode>
+    </Disassembly>
     <Trace2>
         <Enabled>0</Enabled>
         <ShowSource>0</ShowSource>
@@ -107,7 +110,9 @@
         <Category>_ 0</Category>
     </LogFile>
     <Aliases>
-        <Count>0</Count>
+        <A0>_ "C:\STM32Toolchain\teammmd\BNO055\Drivers\STM32L1xx_HAL_Driver\Src\stm32l1xx_hal_uart.c" ""</A0>
+        <A1>_ "C:\STM32Toolchain\teammmd\BNO055\Src\main.c" ""</A1>
+        <Count>2</Count>
         <SuppressDialog>0</SuppressDialog>
     </Aliases>
     <DriverProfiling>
