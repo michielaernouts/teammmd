@@ -6,6 +6,8 @@ WORKS:
 Barometer (MPL3115A2)
 Magnetometer (MAG3110)
 Accelerometer (ADXL345) more precise accelerometer
+DASH7 ALP transmit over UART
+BNO055 Magnetometer, Gyroscope, Accelerometer with automatic calibration
 
 WORKS BUT NEEDS IMPROVEMENTS:
 -----------------------------
