@@ -61,7 +61,6 @@ uint8_t MPL3115A2_Initialized = 0;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -72,6 +71,7 @@ static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
+void D7SendData(int data[]);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -134,16 +134,16 @@ int main(void)
   while (1)
   {
   /* USER CODE END WHILE */
-
-  /* USER CODE BEGIN 3 */
-      /*if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_RESET) {
-	          HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-                  Dash7Send();
-	          HAL_Delay(500);
-      }*/
-
-      BNO055_get_Euler_Angles(&euler_angles);
-      printf("Heading:%+6.1f [deg], Roll:%+6.1f [deg], Pitch:%+6.1f [deg]\r\n", euler_angles.h, euler_angles.r, euler_angles.p);
+      
+      if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_RESET) {
+          HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+          BNO055_get_Euler_Angles(&euler_angles);
+          printf("Heading:%+6.1f [deg], Roll:%+6.1f [deg], Pitch:%+6.1f [deg]\r\n", euler_angles.h, euler_angles.r, euler_angles.p);
+          int BNO_Angles[] = {euler_angles.h, euler_angles.r, euler_angles.p};
+          D7SendData(BNO_Angles);    
+          HAL_Delay(500);
+          HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);      
+      }
       
       HAL_Delay(30);
     
@@ -152,13 +152,50 @@ int main(void)
 
 }
 
+void getBin(int num, char *str)
+{
+  *(str+15) = '\0';
+  int mask = 0x8000 << 1;
+  while(mask >>= 1)
+    *str++ = !!(mask & num) + '0';
+}
 
 
-/*  
+static void dataToHex(int data,int dataHex[2]){
+  char binstr[16];
+  getBin(data, binstr);
+  int len = strlen(binstr);
+  
+  printf("[DATA] = %d \n\r",data);
+  printf("[BIN] = %s \n\r",binstr);
+  
+  int len1 = len/2;
+  int len2 = len - len1; // Compensate for possible odd length
+  char *s1 = (uint8_t*)malloc(len1+1); // one for the null terminator
+  memcpy(s1, binstr, len1);
+  s1[len1] = '\0';
+  char *s2 = (uint8_t*)malloc(len2+1); // one for the null terminator
+  memcpy(s2, binstr+len1, len2);
+  s2[len2] = '\0';
+  
+  printf("[BIN1] = %s \n\r",s1);
+  printf("[BIN2] = %s \n\n\r",s2);
+  
+  dataHex[0] = strtol(s1, NULL, 2);
+  dataHex[1] = strtol(s2, NULL, 2);
+  
+  free(s1);
+  free(s2);
+
+}
+
+void D7SendData(int data[]){
+      
+  /*  
     -----------------------------FULL COMMAND WITH DATA [0,1] -------------------
-    41 54 24 44 c0 00 0e b4 af 32 d7 01 00 10 01 20 01 00 02 00 01 
-    0x41 0x54 0x24 0x44 0xc0 0x00 0x0e 0xb4 0xaf 0x32 0xd7 0x01 0x00 0x10 0x01 0x20 0x01 0x00 0x02 0x00 0x01
-    $41 $54 $24 $44 $c0 $00 $0e $b4 $af $32 $d7 $01 $00 $10 $01 $20 $01 $00 $02 $00 $01
+    41 54 24 44 c0 00 0e 34 af 32 d7 01 00 10 01 20 01 00 02 00 01 
+    0x41 0x54 0x24 0x44 0xc0 0x00 0x0e 0x34 0xaf 0x32 0xd7 0x01 0x00 0x10 0x01 0x20 0x01 0x00 0x02 0x00 0x01
+    $41 $54 $24 $44 $c0 $00 $0e $34 $af $32 $d7 $01 $00 $10 $01 $20 $01 $00 $02 $00 $01
     
             ---------------------SERIALIZE------------------------
     41 54 24 44 c0 00 0e
@@ -201,10 +238,7 @@ int main(void)
     
     PARSED:
     actions:
-	action: Forward: interface-id=InterfaceType.D7ASP, configuration={'addressee': {'nls_method': <NlsMethod.NONE: 0>, 'access_class': 1,
-            '__CLASS__': 'Addressee', 'id_type': <IdType.NOID: 1>, 'id': None}, 'qos': {'record': False, 'resp_mod': <ResponseMode.RESP_MODE_ALL: 1>, 
-            '__CLASS__': 'QoS', 'retry_mod': <RetryMode.RETRY_MODE_NO: 0>, 'stop_on_err': False}, '__CLASS__': 'Configuration', 'dorm_to': {'mant': 0, '__CLASS__': 'CT', 'exp': 0}}
-
+	action: Forward: interface-id=InterfaceType.D7ASP, configuration={'addressee': {'nls_method': <NlsMethod.NONE: 0>, 'access_class': 1, '__CLASS__': 'Addressee', 'id_type': <IdType.NOID: 1>, 'id': None}, 'qos': {'record': False, 'resp_mod': <ResponseMode.RESP_MODE_ALL: 1>, '__CLASS__': 'QoS', 'retry_mod': <RetryMode.RETRY_MODE_NO: 0>, 'stop_on_err': False}, '__CLASS__': 'Configuration', 'dorm_to': {'mant': 0, '__CLASS__': 'CT', 'exp': 0}}
     ++++++++++++++ RETURN FILE DATA ++++++++++++++++
     
     ALP COMMAND:
@@ -223,6 +257,46 @@ int main(void)
     actions:
         action: ReturnFileData: file-id=1, size=1, offset=0, length=2, data=[0, 1]
 */
+  
+   //printf("[ALP_LENGTH] = %d \n\n\r",7 + ALP_LENGTH);
+    
+    uint8_t ALPCommand[7 + ALP_LENGTH] = {  
+      0x41, 0x54, 0x24, 0x44, 0xc0, 0x00, ALP_LENGTH, // SERIAL
+      0x34, 0x01, //TAG
+      0x32, 0xd7, 0x01, 0x00, 0x10, 0x01, //FORWARD
+      0x20, 0x01, 0x00, //CommnandLine
+      DASH7_DATALENGTH //Data
+    };
+
+   int datacounter = 0;
+   int arraycounter = 19;
+   int dataHex[2];
+ 
+   while(datacounter < DASH7_ARRAYLENGTH){
+
+    dataToHex(data[datacounter],dataHex);
+
+    ALPCommand[arraycounter] = dataHex[0];
+    //printf("[SPOT0] = %d \n\n\r",arraycounter);
+    //printf("[DATA%d:HEX0] = %X \n\r",datacounter,dataHex[0]);
+    arraycounter++;
+    
+    ALPCommand[arraycounter] = dataHex[1];
+    //printf("[SPOT1] = %d \n\n\r",arraycounter);
+    //printf("[DATA%d:HEX1] = %X \n\n\r",datacounter,dataHex[1]);
+    arraycounter++;
+    datacounter++;
+    
+    dataHex[0] = 0;
+    dataHex[1] = 0;
+   }
+   printf("ALP: %s \r\n", ALPCommand);
+  HAL_UART_Transmit(&huart1, (uint8_t*)ALPCommand, sizeof(ALPCommand),HAL_MAX_DELAY);
+   
+}
+
+
+
 void Dash7Send(void)
 {
   uint8_t message[] = {0x41, 0x54, 0x24, 0x44, 0xc0, 0x00, 0x0e, 0xb4, 0xaf, 0x32, 0xd7, 0x01, 0x00, 0x10, 0x01, 0x20, 0x01, 0x00, 0x02, 0x00, 0x01};
