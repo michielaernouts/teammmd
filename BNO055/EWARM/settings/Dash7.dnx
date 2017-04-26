@@ -9,7 +9,7 @@
         <stlinkfoundProbes />
     </StLinkDriver>
     <DebugChecksum>
-        <Checksum>491227808</Checksum>
+        <Checksum>2156952279</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>
@@ -112,7 +112,8 @@
     <Aliases>
         <A0>_ "C:\STM32Toolchain\teammmd\BNO055\Drivers\STM32L1xx_HAL_Driver\Src\stm32l1xx_hal_uart.c" ""</A0>
         <A1>_ "C:\STM32Toolchain\teammmd\BNO055\Src\main.c" ""</A1>
-        <Count>2</Count>
+        <A2>_ "C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\Drivers\STM32L1xx_HAL_Driver\Src\stm32l1xx_hal.c" ""</A2>
+        <Count>3</Count>
         <SuppressDialog>0</SuppressDialog>
     </Aliases>
     <DriverProfiling>
