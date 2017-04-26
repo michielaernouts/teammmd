@@ -108,6 +108,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
     uint8_t opt = 0;
     char readBuf[1];
+    uint8_t calibData;
     
     //set operation mode to NDOF (reg 3D to 00001100)
     //char operationModeData[2] = {0x3D, 00001100};
@@ -127,10 +128,14 @@ int main(void)
                   Dash7Send();
 	          HAL_Delay(500);
       }*/
+    
+      calibData =  BNO055_read_calib_status();
+      
       
       BNO055_get_Euler_Angles(&euler_angles);
       printf("Heading:%+6.1f [deg], Roll:%+6.1f [deg], Pitch:%+6.1f [deg]\r\n", euler_angles.h, euler_angles.r, euler_angles.p);
-    
+      printf("Calibration byte: %d \r\n", calibData);
+      
       HAL_Delay(30);
 
     
