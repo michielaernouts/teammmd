@@ -113,6 +113,8 @@ int main(void)
     char readBuf[1];
     uint8_t calibData = BNO055_read_calib_status();
     
+    printf("Randomly move the BNO055 for calibration \r\n");
+    
   /*Calibrate BNO055 until register value is 63, 127, 191, 255 */
     while(calibData != (63 || 127 || 191 || 255))
     {
@@ -126,6 +128,7 @@ int main(void)
     
     HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
     printf("********************BNO055 calibrated******************** \r\n");
+    printf("Push the blue button to get measurements \r\n");
     
     //set operation mode to NDOF (reg 3D to 00001100)
     //char operationModeData[2] = {0x3D, 00001100};
@@ -153,13 +156,13 @@ int main(void)
           printf("Pressure: %d Pa \r\n", pressure);
           
           //send data over DASH7 (868MHz)
-          int BNO_Angles[] = {euler_angles.h, euler_angles.r, euler_angles.p};
-          D7SendData(BNO_Angles);
+          int pres[] = {pressure};
+          D7SendData(pres);
           
           HAL_Delay(500);
-          int pres[] = {pressure, 38, 95};
-          D7SendData(&pressure);
-
+          
+          int BNO_Angles[] = {euler_angles.h, euler_angles.r, euler_angles.p};
+          D7SendData(BNO_Angles);
           
           HAL_Delay(500);
           HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);      
@@ -210,7 +213,7 @@ static void dataToHex(int data,int dataHex[2]){
 }
 
 void D7SendData(int data[]){
-      
+    
   /*  
     -----------------------------FULL COMMAND WITH DATA [0,1] -------------------
     41 54 24 44 c0 00 0e 34 af 32 d7 01 00 10 01 20 01 00 02 00 01 
@@ -277,10 +280,18 @@ void D7SendData(int data[]){
     actions:
         action: ReturnFileData: file-id=1, size=1, offset=0, length=2, data=[0, 1]
 */
-  
+   uint8_t arrayLength = sizeof(&data);
+   uint8_t dataLength = arrayLength*2;
+   uint8_t alpLength = 12 + dataLength;
+   
+   printf("arrayLength: %d \r\n", arrayLength);
+   
+   //uint8_t ALPCommand = malloc(7+alpLength*sizeof(uint8_t));
+   
+   
    //printf("[ALP_LENGTH] = %d \n\n\r",7 + ALP_LENGTH);
     
-    uint8_t ALPCommand[7 + ALP_LENGTH] = {  
+   uint8_t ALPCommand[7 + ALP_LENGTH] = {  
       0x41, 0x54, 0x24, 0x44, 0xc0, 0x00, ALP_LENGTH, // SERIAL
       0x34, 0x01, //TAG
       0x32, 0xd7, 0x01, 0x00, 0x10, 0x01, //FORWARD

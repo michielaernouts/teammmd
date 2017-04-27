@@ -23,9 +23,9 @@ param([String]$debugfile = "");
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\STM32Toolchain\teammmd\BNO055\EWARM\settings\Dash7.Dash7.general.xcl" --backend -f "C:\STM32Toolchain\teammmd\BNO055\EWARM\settings\Dash7.Dash7.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\EWARM\settings\Dash7.Dash7.general.xcl" --backend -f "C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\EWARM\settings\Dash7.Dash7.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\STM32Toolchain\teammmd\BNO055\EWARM\settings\Dash7.Dash7.general.xcl" --debug_file=$debugfile --backend -f "C:\STM32Toolchain\teammmd\BNO055\EWARM\settings\Dash7.Dash7.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\EWARM\settings\Dash7.Dash7.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\EWARM\settings\Dash7.Dash7.driver.xcl" 
 }

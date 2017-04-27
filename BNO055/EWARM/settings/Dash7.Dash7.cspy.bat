@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\STM32Toolchain\teammmd\BNO055\EWARM\settings\Dash7.Dash7.general.xcl" --backend -f "C:\STM32Toolchain\teammmd\BNO055\EWARM\settings\Dash7.Dash7.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\EWARM\settings\Dash7.Dash7.general.xcl" --backend -f "C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\EWARM\settings\Dash7.Dash7.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\STM32Toolchain\teammmd\BNO055\EWARM\settings\Dash7.Dash7.general.xcl" "--debug_file=%~1" --backend -f "C:\STM32Toolchain\teammmd\BNO055\EWARM\settings\Dash7.Dash7.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\EWARM\settings\Dash7.Dash7.general.xcl" "--debug_file=%~1" --backend -f "C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\EWARM\settings\Dash7.Dash7.driver.xcl" 
 
 @echo off 
 :end
