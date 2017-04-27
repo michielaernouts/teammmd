@@ -72,7 +72,7 @@ static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
-void D7SendData(int data[]);
+void D7SendData(int data[],int length);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -115,7 +115,15 @@ int main(void)
     
     printf("Randomly move the BNO055 for calibration \r\n");
     
-  /*Calibrate BNO055 until register value is 63, 127, 191, 255 */
+  /*Calibrate BNO055 until register value is 63, 127, 191, 255
+    first two bits are system calibration bits, last 6 are for gyro, accelero and magneto
+    
+    63 =  00111111
+    127 = 01111111
+    191 = 10111111
+    255 = 11111111
+    
+    */
     while(calibData != (63 || 127 || 191 || 255))
     {
       BNO055_change_fusion_mode(CONFIGMODE);
@@ -128,11 +136,9 @@ int main(void)
     
     HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
     printf("********************BNO055 calibrated******************** \r\n");
-    printf("Push the blue button to get measurements \r\n");
+    printf("Push the blue button to send measurements over Dash7 \r\n");
     
-    //set operation mode to NDOF (reg 3D to 00001100)
-    //char operationModeData[2] = {0x3D, 00001100};
-    //WRITE_REGISTER_BNO055(operationModeData,2);
+
     
   /* USER CODE END 2 */
 
@@ -156,15 +162,21 @@ int main(void)
           printf("Pressure: %d Pa \r\n", pressure);
           
           //send data over DASH7 (868MHz)
+          int test[] = {1,2,3,4,5,6,7,8,9,10};
+          D7SendData(test, (sizeof(test)/sizeof(test[0])));
+            
+          HAL_Delay(500);
+          
           int pres[] = {pressure};
-          D7SendData(pres);
+          D7SendData(pres, (sizeof(pres)/sizeof(pres[0])));
+            
+          HAL_Delay(500);
+          
+          int BNO_Angles[] = {euler_angles.h, euler_angles.r, euler_angles.p, euler_angles.h, euler_angles.r, euler_angles.p};
+          D7SendData(BNO_Angles, (sizeof(BNO_Angles)/sizeof(BNO_Angles[0])));       
           
           HAL_Delay(500);
           
-          int BNO_Angles[] = {euler_angles.h, euler_angles.r, euler_angles.p};
-          D7SendData(BNO_Angles);
-          
-          HAL_Delay(500);
           HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);      
       }
       
@@ -212,7 +224,7 @@ static void dataToHex(int data,int dataHex[2]){
 
 }
 
-void D7SendData(int data[]){
+void D7SendData(int data[], int length){
     
   /*  
     -----------------------------FULL COMMAND WITH DATA [0,1] -------------------
@@ -280,50 +292,89 @@ void D7SendData(int data[]){
     actions:
         action: ReturnFileData: file-id=1, size=1, offset=0, length=2, data=[0, 1]
 */
-   uint8_t arrayLength = sizeof(&data);
-   uint8_t dataLength = arrayLength*2;
-   uint8_t alpLength = 12 + dataLength;
+
+   printf("Length: %d \r\n", length);
    
-   printf("arrayLength: %d \r\n", arrayLength);
-   
-   //uint8_t ALPCommand = malloc(7+alpLength*sizeof(uint8_t));
-   
-   
-   //printf("[ALP_LENGTH] = %d \n\n\r",7 + ALP_LENGTH);
-    
-   uint8_t ALPCommand[7 + ALP_LENGTH] = {  
+   if( length <=4 )
+   {
+     uint8_t ALPCommand[7 + ALP_LENGTH] = {  
       0x41, 0x54, 0x24, 0x44, 0xc0, 0x00, ALP_LENGTH, // SERIAL
       0x34, 0x01, //TAG
       0x32, 0xd7, 0x01, 0x00, 0x10, 0x01, //FORWARD
       0x20, 0x01, 0x00, //CommnandLine
       DASH7_DATALENGTH //Data
-    };
-
-   int datacounter = 0;
-   int arraycounter = 19;
-   int dataHex[2];
+    };    
+    
+      int datacounter = 0;
+      int arraycounter = 19;
+      int dataHex[2];
  
-   while(datacounter < DASH7_ARRAYLENGTH){
+      while(datacounter < length){
 
-    dataToHex(data[datacounter],dataHex);
+        dataToHex(data[datacounter],dataHex);
 
-    ALPCommand[arraycounter] = dataHex[0];
-    //printf("[SPOT0] = %d \n\n\r",arraycounter);
-    //printf("[DATA%d:HEX0] = %X \n\r",datacounter,dataHex[0]);
-    arraycounter++;
+        ALPCommand[arraycounter] = dataHex[0];
+        //printf("[SPOT0] = %d \n\n\r",arraycounter);
+        //printf("[DATA%d:HEX0] = %X \n\r",datacounter,dataHex[0]);
+        arraycounter++;
     
-    ALPCommand[arraycounter] = dataHex[1];
-    //printf("[SPOT1] = %d \n\n\r",arraycounter);
-    //printf("[DATA%d:HEX1] = %X \n\n\r",datacounter,dataHex[1]);
-    arraycounter++;
-    datacounter++;
+        ALPCommand[arraycounter] = dataHex[1];
+        //printf("[SPOT1] = %d \n\n\r",arraycounter);
+        //printf("[DATA%d:HEX1] = %X \n\n\r",datacounter,dataHex[1]);
+        arraycounter++;
+        datacounter++;
     
-    dataHex[0] = 0;
-    dataHex[1] = 0;
-   }
-   printf("ALP: %s \r\n", ALPCommand);
-  HAL_UART_Transmit(&huart1, (uint8_t*)ALPCommand, sizeof(ALPCommand),HAL_MAX_DELAY);
+        dataHex[0] = 0;
+        dataHex[1] = 0;
+        
+      }
    
+      printf("ALP: %s \r\n", ALPCommand);
+      HAL_UART_Transmit(&huart1, (uint8_t*)ALPCommand, sizeof(ALPCommand),HAL_MAX_DELAY);
+   }
+   
+   
+   else if(length <= 8)
+   {
+     uint8_t ALPCommand[7 + ALP_LENGTH_LARGE] = {  
+      0x41, 0x54, 0x24, 0x44, 0xc0, 0x00, ALP_LENGTH_LARGE, // SERIAL
+      0x34, 0x01, //TAG
+      0x32, 0xd7, 0x01, 0x00, 0x10, 0x01, //FORWARD
+      0x20, 0x01, 0x00, //CommnandLine
+      DASH7_DATALENGTH_LARGE //Data
+    };   
+   
+      int datacounter = 0;
+      int arraycounter = 19;
+      int dataHex[2];
+ 
+      while(datacounter < length){
+
+          dataToHex(data[datacounter],dataHex);
+
+          ALPCommand[arraycounter] = dataHex[0];
+          //printf("[SPOT0] = %d \n\n\r",arraycounter);
+          //printf("[DATA%d:HEX0] = %X \n\r",datacounter,dataHex[0]);
+          arraycounter++;
+    
+          ALPCommand[arraycounter] = dataHex[1];
+          //printf("[SPOT1] = %d \n\n\r",arraycounter);
+          //printf("[DATA%d:HEX1] = %X \n\n\r",datacounter,dataHex[1]);
+          arraycounter++;
+          datacounter++;
+    
+          dataHex[0] = 0;
+          dataHex[1] = 0;
+      }
+      printf("ALP: %s \r\n", ALPCommand);
+      HAL_UART_Transmit(&huart1, (uint8_t*)ALPCommand, sizeof(ALPCommand),HAL_MAX_DELAY);
+   
+   }
+   else
+   {
+     printf("Data array too long. \r\n");
+   } 
+ 
 }
 
 

@@ -1,16 +1,16 @@
-"C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\Drivers\STM32L1xx_HAL_Driver\Src\stm32l1xx_hal_tim_ex.c"
+"C:\STM32Toolchain\teammmd\BNO055\Drivers\STM32L1xx_HAL_Driver\Src\stm32l1xx_hal_tim_ex.c"
 -std=c11
 -ferror-limit=100
 -I
-C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\EWARM/../Inc
+C:\STM32Toolchain\teammmd\BNO055\EWARM/../Inc
 -I
-C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\EWARM/../Drivers/STM32L1xx_HAL_Driver/Inc
+C:\STM32Toolchain\teammmd\BNO055\EWARM/../Drivers/STM32L1xx_HAL_Driver/Inc
 -I
-C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\EWARM/../Drivers/STM32L1xx_HAL_Driver/Inc/Legacy
+C:\STM32Toolchain\teammmd\BNO055\EWARM/../Drivers/STM32L1xx_HAL_Driver/Inc/Legacy
 -I
-C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\EWARM/../Drivers/CMSIS/Device/ST/STM32L1xx/Include
+C:\STM32Toolchain\teammmd\BNO055\EWARM/../Drivers/CMSIS/Device/ST/STM32L1xx/Include
 -I
-C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\EWARM/../Drivers/CMSIS/Include
+C:\STM32Toolchain\teammmd\BNO055\EWARM/../Drivers/CMSIS/Include
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\CMSIS\Include
 -I
@@ -18,15 +18,15 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\inc
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\inc\c
 -I
-C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\Inc
+C:\STM32Toolchain\teammmd\BNO055\Inc
 -I
-C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\Drivers\STM32L1xx_HAL_Driver\Inc
+C:\STM32Toolchain\teammmd\BNO055\Drivers\STM32L1xx_HAL_Driver\Inc
 -I
-C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\Drivers\STM32L1xx_HAL_Driver\Inc\Legacy
+C:\STM32Toolchain\teammmd\BNO055\Drivers\STM32L1xx_HAL_Driver\Inc\Legacy
 -I
-C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\Drivers\CMSIS\Device\ST\STM32L1xx\Include
+C:\STM32Toolchain\teammmd\BNO055\Drivers\CMSIS\Device\ST\STM32L1xx\Include
 -I
-C:\Users\Michiel\Documents\GitHub\teammmd\BNO055\Drivers\CMSIS\Include
+C:\STM32Toolchain\teammmd\BNO055\Drivers\CMSIS\Include
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\CMSIS\Include
 -D__CHAR_BITS__=8

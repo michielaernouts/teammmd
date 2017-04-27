@@ -57,18 +57,13 @@
 #define SWO_GPIO_Port GPIOB
 
 //SMALL SIZE PACKAGE
-#define DASH7_ARRAYLENGTH_SMALL                 1
-#define DASH7_DATALENGTH_SMALL                   DASH7_ARRAYLENGTH_SMALL * 2      
-#define ALP_LENGTH_SMALL                         12 + DASH7_DATALENGTH_SMALL 
-
-//MEDIUM SIZE PACKAGE
-#define DASH7_ARRAYLENGTH               3
-#define DASH7_DATALENGTH                  DASH7_ARRAYLENGTH * 2      
-#define ALP_LENGTH                       12 + DASH7_DATALENGTH
+#define DASH7_ARRAYLENGTH                       4
+#define DASH7_DATALENGTH                        DASH7_ARRAYLENGTH * 2      
+#define ALP_LENGTH                              12 + DASH7_DATALENGTH
 
 //LARGE SIZE PACKAGE
-#define DASH7_ARRAYLENGTH_LARGE                8
-#define DASH7_DATALENGTH_LARGE                 DASH7_ARRAYLENGTH_LARGE * 2      
+#define DASH7_ARRAYLENGTH_LARGE                 8
+#define DASH7_DATALENGTH_LARGE                  DASH7_ARRAYLENGTH_LARGE * 2      
 #define ALP_LENGTH_LARGE                        12 + DASH7_DATALENGTH_LARGE 
 
 /* USER CODE BEGIN Private defines */
