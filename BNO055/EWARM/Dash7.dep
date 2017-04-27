@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
     <fileVersion>2</fileVersion>
-    <fileChecksum>972422577</fileChecksum>
+    <fileChecksum>1875977810</fileChecksum>
     <configuration>
         <name>Dash7</name>
         <outputs>
@@ -112,6 +112,10 @@
             <file>$PROJ_DIR$\..\Src\stm32l1xx_hal_msp.c</file>
             <file>$PROJ_DIR$\..\Src\stm32l1xx_it.c</file>
             <file>$PROJ_DIR$\..\Drivers\CMSIS\Device\ST\STM32L1xx\Source\Templates\iar\startup_stm32l152xe.s</file>
+            <file>$PROJ_DIR$\..\Src\MPL3115A2.c</file>
+            <file>$PROJ_DIR$\Dash7\Obj\MPL3115A2.pbi</file>
+            <file>$PROJ_DIR$\..\Inc\MPL3115A2.h</file>
+            <file>$PROJ_DIR$\Dash7\Obj\MPL3115A2.o</file>
         </outputs>
         <file>
             <name>$PROJ_DIR$\..\Drivers\CMSIS\Device\ST\STM32L1xx\Source\Templates\system_stm32l1xx.c</name>
@@ -492,7 +496,7 @@
             <inputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 56 3 38 33 12 95 100 72 15 63 76 68 75 31 7 66 18 11 65 85 87 39 59 41 53 52</file>
+                    <file> 56 3 38 110 33 12 95 100 72 15 63 76 68 75 31 7 66 18 11 65 85 87 39 59 41 53 52</file>
                 </tool>
             </inputs>
         </file>
@@ -520,11 +524,11 @@
             <inputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 61 77 92 86 8 81 84 90 94 82 98 14 23 6 28 83 69 16 71 4 1 101 17 30 79 37 67 70 10 26 89 22 64 97</file>
+                    <file> 23 98 61 16 6 69 81 14 8 28 83 109 84 90 77 92 94 86 82 71 4 1 101 17 30 79 37 67 70 10 26 89 22 64 97</file>
                 </tool>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 14 98 71 4 8 90 10 6 61 77 82 92 34 94 89 86 22 28 26 70 23 64 84 1 83 101 17 30 97 69 79 37 16 67 81</file>
+                    <file> 14 98 71 4 8 90 10 6 61 77 82 92 34 94 89 86 22 28 26 70 23 64 84 1 83 101 17 30 97 69 79 37 16 67 81 109</file>
                 </tool>
             </inputs>
         </file>
@@ -605,6 +609,29 @@
                     <file> 33</file>
                 </tool>
             </outputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\Src\MPL3115A2.c</name>
+            <outputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 108</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 110</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 89 82 8 14 70 86 64 97 98 71 4 1 101 17 30 79 37 67 10 26 22 77 109 84 90 23 6 61 28 92 94 83 69 16</file>
+                </tool>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 109 98 71 14 4 8 90 10 6 61 77 82 92 34 94 89 86 22 28 26 70 23 64 84 1 83 101 17 30 97 69 79 37 16 67</file>
+                </tool>
+            </inputs>
         </file>
     </configuration>
 </project>

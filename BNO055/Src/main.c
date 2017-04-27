@@ -36,6 +36,7 @@
 #include "main.h"
 #include "stm32l1xx_hal.h"
 #include "BNO055.h"
+#include "MPL3115A2.h"
 
 /* USER CODE BEGIN Includes */
 /* USER CODE BEGIN Includes */
@@ -103,6 +104,9 @@ int main(void)
   MX_USART2_UART_Init();
   setI2CInterface_BNO055(&hi2c1);
   BNO055_initialize();
+  setI2CInterface_MPL3115A2(&hi2c1);
+  Init_Bar_MPL3115A2();
+  Active_MPL3115A2();
   
   /* USER CODE BEGIN 2 */
     uint8_t opt = 0;
@@ -137,10 +141,26 @@ int main(void)
       
       if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_RESET) {
           HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+          
+          //read euler angles
           BNO055_get_Euler_Angles(&euler_angles);
           printf("Heading:%+6.1f [deg], Roll:%+6.1f [deg], Pitch:%+6.1f [deg]\r\n", euler_angles.h, euler_angles.r, euler_angles.p);
+          
+          //read pressure
+          uint32_t bar = 0;
+          ReadBar_MPL3115A2_v2(&bar);
+          int pressure = parseBar_MPL3115A2(bar);
+          printf("Pressure: %d Pa \r\n", pressure);
+          
+          //send data over DASH7 (868MHz)
           int BNO_Angles[] = {euler_angles.h, euler_angles.r, euler_angles.p};
-          D7SendData(BNO_Angles);    
+          D7SendData(BNO_Angles);
+          
+          HAL_Delay(500);
+          int pres[] = {pressure, 38, 95};
+          D7SendData(&pressure);
+
+          
           HAL_Delay(500);
           HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);      
       }
