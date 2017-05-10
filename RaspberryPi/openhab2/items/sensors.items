@@ -1,9 +1,0 @@
-Group All
-
-
-Number D7Temp "Temperature [%.1f °C]" <temperature> {mqtt="<[myBroker:sensors/tempD7:state:default]"}
-Number piTemp "Temperature [%.1f °C]" <temperature> {mqtt="<[myBroker:sensors/temp:state:default]"}
-DateTime Date2 "Date and time [%1$tA, %1$td.%1$tm.%1$tY %1$tT]" <calendar> { channel="ntp:ntp:sensors:dateTime" }
-
-Number Pitemp_Period <chart>
-Number piTemp2 (All) {mqtt="<[myBroker:sensors/temp:state:default]"}

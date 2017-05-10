@@ -1,3 +1,0 @@
-
-class ConfigurationException(Exception):
-	pass
