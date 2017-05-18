@@ -3,7 +3,17 @@ Fusion of PN532 and PIR sensor
 
 PC8 = interrupt line for PN532
 PC6 = interrupt line for PIR sensor
-PC5 =  GPIO to hihg to stabilize power of octa board
+PC5 =  GPIO to high to stabilize power of octa board
+
+PB7 = SDA
+PB6 = SCL
+
+PIR is detected with LED on STM board 
+
+TODO:
+=> message needs to be sent to Dash7 when detection 
+=> PN532 also needs to be sent to Dash7
+=> Maybe have a look at the interrupt levels, both are now 0
 
 Needs to be formatted to more cleaner code
 */
@@ -61,25 +71,29 @@ int main(void)
  
   SAMConfig();
   uint32_t success;
-  uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
-  uint8_t uidLength;   
-  
+  uint8_t uid[] = { 0, 0, 0, 0 };  // Buffer to store the returned UID
+  uint8_t uidLength;  
+ 
   while (1)
   {
-     // Length of the UID (4 or 7 bytes depending on ISO14443A card type)
-  
+  // Length of the UID (4 or 7 bytes depending on ISO14443A card type)  
   success = readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength, 1000); // added 10000
   
   if (success) {
     
-    uint8_t s1 = success>>24;
-    uint8_t s2 = success>>16;
-    uint8_t s3 = success>>8;
-    uint8_t s4 = success;
+    uint8_t b1 = success>>24;
+    uint8_t b2 = success>>16;
+    uint8_t b3 = success>>8;
+    uint8_t b4 = success;
     
+    // prep for Dash7, uidLength has the length of the UID (4)
+    uint8_t uid_data[] = {b1, b2, b3, b4};
+    
+    // Print the UID (4 bytes)
     char str13[30];
-    sprintf(str13, "\n 0x%02X, 0x%02X, 0x%02X, 0x%02X", s1,s2,s3,s4);
+    sprintf(str13, "\n %02X%02X%02X%02X", b1, b2, b3, b4);
     HAL_UART_Transmit(&huart2, (uint8_t*)str13, strlen(str13), HAL_MAX_DELAY);
+    
 
     // Wait 0.5 second before continuing
     HAL_Delay(500);
@@ -90,18 +104,22 @@ int main(void)
 }
 
 
-// For LED PIR, to show there is motion
-void LIGHT_ON()
+// LED PIR
+void LED_ON()
 {
-  //HAL_GPIO_WritePin(GPIOC, GPIO_PIN_5, GPIO_PIN_SET); 
-  HAL_UART_Transmit(&huart2, (uint8_t*)" Motion ", strlen(" Motion "), HAL_MAX_DELAY);
+  //Turn LD2 ON WHEN MOTION DETECTED
+   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+  //HAL_UART_Transmit(&huart2, (uint8_t*)" Motion ", strlen(" Motion "), HAL_MAX_DELAY);
 }
 
-void LIGHT_OFF()
+void LED_OFF()
 {
-//  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_5, GPIO_PIN_RESET);
-   HAL_UART_Transmit(&huart2, (uint8_t*)" No Motion ", strlen(" No Motion "), HAL_MAX_DELAY);
+   //TURN LD2 ON WHEN MOTION DETECTED  
+  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+  // HAL_UART_Transmit(&huart2, (uint8_t*)" No Motion ", strlen(" No Motion "), HAL_MAX_DELAY);
 }
+
+
 
 /** System Clock Configuration
 */
@@ -318,11 +336,11 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
   
     if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_6) == 1)
     {
-      LIGHT_ON();
+      LED_ON();
     }
     else if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_6) == 0)
     {
-      LIGHT_OFF();
+      LED_OFF();
     }
 
     if(GPIO_Pin == GPIO_PIN_8)
