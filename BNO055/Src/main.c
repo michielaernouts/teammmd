@@ -52,6 +52,7 @@
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
 BNO055_EULER_TypeDef  euler_angles;
+BNO055_MAG_TypeDef mag;
 BNO055_TEMPERATURE_TypeDef temperature;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
@@ -154,6 +155,10 @@ int main(void)
           //read euler angles
           BNO055_get_Euler_Angles(&euler_angles);
           printf("Heading:%+6.1f [deg], Roll:%+6.1f [deg], Pitch:%+6.1f [deg]\r\n", euler_angles.h, euler_angles.r, euler_angles.p);
+          
+          //read MAG data
+          BNO055_get_MAG(&mag);
+          printf("XMSB:%+6.1f, XLSB:%+6.1f, YMSB:%+6.1f, YLSB:%+6.1f, ZMSB:%+6.1f, ZLSB:%+6.1f \r\n", mag.XMSB, mag.XLSB, mag.YMSB, mag.YLSB, mag.ZMSB, mag.ZLSB); 
           
           //read pressure
           uint32_t bar = 0;

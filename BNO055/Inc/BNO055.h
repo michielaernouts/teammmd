@@ -73,6 +73,15 @@ typedef struct {
     int8_t acc_chip;
     int8_t gyr_chip;
 } BNO055_TEMPERATURE_TypeDef;
+
+typedef struct {
+    uint8_t XMSB;
+    uint8_t XLSB;
+    uint8_t YMSB;
+    uint8_t YLSB;
+    uint8_t ZMSB;
+    uint8_t ZLSB; 
+} BNO055_MAG_TypeDef;
  
 enum {MT_P0 = 0, MT_P1, MT_P2, MT_P3, MT_P4, MT_P5, MT_P6, MT_P7};
  

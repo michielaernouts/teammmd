@@ -45,6 +45,17 @@ uint8_t READ_REGISTER_BNO055(uint8_t buf[], uint8_t reg, uint8_t length)
 	return status;
 }
 
+/////////////// Get Magnetometer DATA //////////////
+void BNO055_get_MAG(BNO055_MAG_TypeDef *mag)
+{   
+    mag->XMSB = BNO055_read_reg0(BNO055_MAG_X_MSB);
+    mag->XLSB = BNO055_read_reg0(BNO055_MAG_X_LSB);
+    mag->YMSB = BNO055_read_reg0(BNO055_MAG_Y_MSB);
+    mag->YLSB = BNO055_read_reg0(BNO055_MAG_Y_LSB);
+    mag->ZMSB = BNO055_read_reg0(BNO055_MAG_Z_MSB);
+    mag->ZLSB = BNO055_read_reg0(BNO055_MAG_Z_LSB);
+}
+
 /////////////// Read data & normalize /////////////////////
 void BNO055_get_Euler_Angles(BNO055_EULER_TypeDef *el)
 {
@@ -411,7 +422,7 @@ void BNO055_set_mounting_position(uint8_t position)
     WRITE_REGISTER_BNO055(dt,3);
     BNO055_change_fusion_mode(current_mode);
 }
- 
+
 /////////////// I2C Freq. /////////////////////////////////
 /*void BNO055_frequency(int hz)
 {
@@ -423,7 +434,6 @@ uint8_t BNO055_read_reg0(uint8_t addr)
 {
     BNO055_select_page(0);
     dt[0] = addr;
-
     READ_REGISTER_BNO055(dt,addr,1);
     return (uint8_t)dt[0];
 }
